@@ -24,12 +24,13 @@ def subdivide(first,last,ratio,mstd):
     global m_samples
     n = int(last-first)
     if n>1:
-        midpoint = int(math.floor(n/2))+first
+        mn = int(math.floor(n/2))
+        midpoint = mn+first
         std   = mstd*ratio
         value = ((m_samples[first]+m_samples[last])/2.0)+get_random_float(std)
         m_samples[midpoint]=value
-        subdivide(first,midpoint,ratio,std)
-        subdivide(midpoint,last,ratio,std)
+        subdivide(midpoint,midpoint+mn,ratio,std)
+        subdivide(midpoint-mn,midpoint,ratio,std)
     
     
 def generateFbm(n,h,seed):
