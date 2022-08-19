@@ -1,3 +1,12 @@
+##################################################
+## Author: https://github.com/Umwelt32/QuickCode
+## Copyright: 2022
+## Convert .hgt file's to .bmp format
+## References:
+############## https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission
+##############
+##################################################
+
 import cv2,os,sys,numpy,math
 
 def readHgtFile(path):
