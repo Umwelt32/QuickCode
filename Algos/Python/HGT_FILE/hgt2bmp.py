@@ -30,7 +30,7 @@ def NormalizeU16(x):
 def NormalizeData(data):
     binary_data = numpy.array([(x+0x7FFF) for x in data], dtype=numpy.ushort)
     binary_data = NormalizeU16(binary_data)
-    return NormalizeU16(binary_data)
+    return binary_data
     
 def convBinToBmp(data,out):
     max_value_16b = numpy.max(data)
