@@ -62,6 +62,7 @@ def convHgtToBmpRecurse(in_path):
      list = [f for f in os.listdir(in_path) if f.endswith('.hgt')]
      for file in list:
         convHgtToBmp1(file)
+
 if __name__ == "__main__":
     if len(sys.argv)>1:
         convHgtToBmp1(sys.argv[1])
