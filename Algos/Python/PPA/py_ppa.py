@@ -1,9 +1,9 @@
 ##################################################
 ## Author: https://github.com/Umwelt32/QuickCode
 ## Copyright: 2022
-## Convert .hgt file's to .bmp format
+## profile-recognition and polygon-breaking algorithm
 ## References:
-############## https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission
+############## DOI:10.1016/j.cageo.2006.06.007
 ##############
 ##################################################
 
@@ -11,6 +11,18 @@ import cv2,os,sys,numpy,math
 
 m_img    = None
 m_points = None
+
+class profile_point:
+    def __init__(self, x,y):
+        self.m_x=x
+        self.m_y=y
+
+def getImgPoint(x,y):
+    global m_img
+    value = None
+    if (m_img.shape[0] < x) and (m_img.shape[1] < y):
+        value = m_img[x][y]
+    return value
 
 def loadImg(path):
     global m_img
