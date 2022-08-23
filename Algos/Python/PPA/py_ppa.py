@@ -36,24 +36,38 @@ class profile_point:
                 step_size_y = (step[1]*x)
                 p1 = [self.m_x+step_size_x,self.m_y+step_size_y]
                 p2 = [self.m_x-step_size_x,self.m_y-step_size_y]
-                d1 = abs(int(point_value)-int(getImgPoint(p1[0],p1[1])))
-                d2 = abs(int(point_value)-int(getImgPoint(p2[0],p2[1])))
-                #cv2.circle(m_img,(p1[0],p1[1]), 1, (0,0,255), -1)
-                #cv2.circle(m_img,(p2[0],p2[1]), 1, (0,0,255), -1)
-                #print(str(d1)+' || '+str(d2))
-                if (d1>t and d2>t):
+                v1 = int(getImgPoint(p1[0],p1[1]))
+                v2 = int(getImgPoint(p2[0],p2[1]))
+                input_val = evaluatePoints(t,point_value,v1,v2)
+                if (input_val):
                     self.m_isTarget=True
                 else:
-                    break
+                    continue
                 
+def evaluatePoints(t,v_in,v1,v2):
+    eval = False
+    v_in=int(v_in)
+    v1=int(v1)
+    v2=int(v2)
+    d1=v_in-v1
+    d2=v_in-v2
+    if (d1<0 and d2<0) or (d1>0 and d2>0):
+        d1=int(abs(d1))
+        d2=int(abs(d2))
+        if d1>t and d2>t:
+            eval=True
+    return eval
 
 def getImgPoint(x,y):
     global m_img
+    m_x = x
+    m_y = y
     value = 0
-    if (m_img.shape[0] > x) and (m_img.shape[1] > y):
-        value = m_img[x][y]
-    else:
-         value = m_img[m_img.shape[0]-1][m_img.shape[1]-1]
+    m_x=min(m_img.shape[0]-1,m_x)
+    m_y=min(m_img.shape[1]-1,m_y)
+    m_x=max(0,m_x)
+    m_y=max(0,m_y)
+    value = m_img[m_x][m_y]     
     return int(value)
 
 def loadImg(path):
@@ -82,9 +96,9 @@ def DrawCirclesOnTargets(r):
             cv2.circle(m_img,(point.m_x,point.m_y), r, (0,0,255), -1)
       
 if __name__ == "__main__":
-    loadImg('N53E014_hgt.bmp')
-    create_profile_points(16,64)
-    TargetRecognition(8)
+    loadImg('input.bmp')
+    create_profile_points(8,8)
+    TargetRecognition(32)
     DrawCirclesOnTargets(4)
     cv2.imwrite('out.bmp', m_img)
     print("stub")
