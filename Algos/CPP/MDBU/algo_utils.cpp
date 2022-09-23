@@ -9,6 +9,7 @@
 #include "bitmap_image.hpp"
 
 #define RAND_RANGE (8096u)
+#define HALF_RAND_RANGE (4048u)
 #define FI_I_VALUE (1)
 
 namespace algo
@@ -21,11 +22,11 @@ namespace algo
     F32 utils::randomFloat(const F32 &range,const bool &sign)
     {
         F32 v;
-        bool need_sign=false;
-        U32 value = (std::rand()%RAND_RANGE);
-        if ((sign)&&(value>(RAND_RANGE/2u))){need_sign=true;}
-        v = ((F32)(value)/(F32)(RAND_RANGE-1))*range;
-        if (need_sign)v=(v*-1);
+        S32 value = (std::rand()%RAND_RANGE)-HALF_RAND_RANGE;
+        v = ((F32)(value)/(F32)(HALF_RAND_RANGE))*range;
+        if (v>1.0f){v=1.0f;}else if(v<-1.0f){v=-1.0f;}else{;}
+        if (sign==false)v=std::fabs(v);
+        v=v*range;
         return v;
     }
 
