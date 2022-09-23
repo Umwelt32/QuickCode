@@ -89,8 +89,8 @@ int main(int argc, char **argv)
     {
         algo::utils::saveBmpFile(o[0],m_output_file+"_1.bmp");
         algo::utils::saveBmpFile(o[1],m_output_file+"_2.bmp");
-        algo::utils::saveTxtFile(o[2],m_output_file+"_3.txt");
+        algo::utils::saveTxtFile(o[2],m_output_file+"_out.txt");
     }
-    algo::utils::saveBmpFile(o[2],m_output_file+"_3.bmp");
+    algo::utils::saveBmpFile(o[2],m_output_file+"_out.bmp");
     return 0;
 }
