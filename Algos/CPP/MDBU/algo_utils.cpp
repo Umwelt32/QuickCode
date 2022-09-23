@@ -9,6 +9,7 @@
 #include "bitmap_image.hpp"
 
 #define RAND_RANGE (8096u)
+#define FI_I_VALUE (1)
 
 namespace algo
 {
@@ -46,9 +47,9 @@ namespace algo
 
     F32 utils::dBU(const F32 &e,const F32 &d,const F32 &dmax)
     {
-        S32 I = 1;
+        S32 I = FI_I_VALUE;
         F32 dd = (d/dmax);
-        F32 v1 = (1.0f-(std::pow(1.0f-dd,I),I));
+        F32 v1 = (1.0f-std::pow((1.0f-dd),std::fabs(I)));
         F32 v2 = 1-(dFi(I)*v1);
         F32 v3 = e*(v2);
         return v3;
@@ -56,7 +57,7 @@ namespace algo
 
     F32 utils::dFi(const S32 &i)
     {
-        return 1.0f*((F32)1.0f/(F32)i);
+        return (i>=0)?1.0f:-1.0f;
     }
 
     void utils::loadBmpFile(array2d<F32> &out,const std::string &path)
