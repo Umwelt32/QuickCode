@@ -8,6 +8,8 @@
 #include "algo_utils.hpp"
 #include "bitmap_image.hpp"
 
+#define BYTE_MAX (255u)
+#define RGB24_SUM (765u)
 #define RAND_RANGE (8096u)
 #define HALF_RAND_RANGE (4048u)
 #define FI_I_VALUE (1)
@@ -22,8 +24,9 @@ namespace algo
     F32 utils::randomFloat(const F32 &range,const bool &sign)
     {
         F32 v;
-        S32 value = (std::rand()%RAND_RANGE)-HALF_RAND_RANGE;
-        v = ((F32)(value)/(F32)(HALF_RAND_RANGE))*range;
+        S32 value = (std::rand()%RAND_RANGE);
+        value-=HALF_RAND_RANGE;
+        v = ((F32)(value)/(F32)(HALF_RAND_RANGE));
         if (v>1.0f){v=1.0f;}else if(v<-1.0f){v=-1.0f;}else{;}
         if (sign==false)v=std::fabs(v);
         v=v*range;
@@ -77,7 +80,7 @@ namespace algo
                 rgb_t colour;
                 image.get_pixel(x, y, colour);
                 v=colour.red+colour.green+colour.blue;
-                v=(F32)v/((F32)(255+255+255));
+                v=(F32)v/((F32)(RGB24_SUM));
                 out.get(x,y)=v;
             }
         }
@@ -94,8 +97,8 @@ namespace algo
         {
             for(U32 j=0;j<h;++j)
             {
-                U32 tv = (U32)(in.get(i,j)*255u);
-                U8 v=std::min(tv,255u);
+                U32 tv = (U32)(in.get(i,j)*BYTE_MAX);
+                U8 v=std::min(tv,BYTE_MAX);
                 image.set_pixel(i,j,v,v,v);
             }
         }
@@ -106,6 +109,7 @@ namespace algo
     {
         U32 w,h;
         std::ofstream f(path);
+        if(f.bad())return;
         in.getSize(w,h);
         for (U32 i=0;i<w;++i)
         {
