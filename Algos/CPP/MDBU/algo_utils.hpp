@@ -25,7 +25,8 @@ namespace algo
             static void saveTxtFile(array2d<F32> &in,const std::string &path);
             static void normalizeArray(array2d<F32> &in);
             static void getMinMaxArrayElement(array2d<F32> &in,F32 &_min,F32 &_max);
-            static U32 getNearPowerOf2(U32 v);
+            static U32 getNearPowerOf2(const U32 &v);
+            static void setIConst(const S32 &v);
     };
 }
 

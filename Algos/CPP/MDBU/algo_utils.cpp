@@ -16,6 +16,7 @@
 
 namespace algo
 {
+    static S32 I_exponent = FI_I_VALUE;
     void utils::setRandomSeed(const U32 &seed)
     {
         std::srand(seed);
@@ -51,7 +52,7 @@ namespace algo
 
     F32 utils::dBU(const F32 &e,const F32 &d,const F32 &dmax)
     {
-        S32 I = FI_I_VALUE;
+        S32 I = I_exponent;
         F32 dd = (d/dmax);
         F32 v1 = (1.0f-std::pow((1.0f-dd),std::fabs(I)));
         F32 v2 = 1-(dFi(I)*v1);
@@ -122,7 +123,7 @@ namespace algo
         f.close();
     }
 
-    U32 utils::getNearPowerOf2(U32 v)
+    U32 utils::getNearPowerOf2(const U32 &v)
     {
         U32 power=0;
         U32 value=1;
@@ -161,6 +162,11 @@ namespace algo
             F32 *v=in.getElementPtr(i);
             (*v)=normalizeF32(min,max,*v);
         }
+    }
+
+    void utils::setIConst(const S32 &v)
+    {
+        I_exponent=v;
     }
 
 }
