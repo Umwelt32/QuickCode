@@ -19,6 +19,7 @@ std::string m_input_file="bitmap.bmp";
 std::string m_output_file="bitmap";
 U32 m_seed = 128u;
 F32 m_h = 0.3f;
+F32 m_bmp_th = 0.01f;
 int m_n=0;
 bool m_mdbu = true;
 bool m_recurse = false;
@@ -35,6 +36,7 @@ void help_view(void)
     std::cout<<"-seed <int>"<<std::endl;
     std::cout<<"-h <float>"<<std::endl;
     std::cout<<"-file <file>"<<std::endl;
+    std::cout<<"-th <float>"<<std::endl;
     std::cout<<"-out <file>"<<std::endl;
     std::cout<<"-n <int>"<<std::endl;
     std::cout<<"-i <int>"<<std::endl;
@@ -56,6 +58,7 @@ void parse_params(int argc, char **argv)
         std::cout<<param<<" ";
         if (param=="-seed"){m_seed=read_param_int();}
         else if(param=="-h"){m_h=read_param_f();}
+        else if(param=="-th"){m_bmp_th=read_param_f();}
         else if(param=="-file"){m_input_file=read_param_str();}
         else if(param=="-out"){m_output_file=read_param_str();}
         else if(param=="-n"){m_n=read_param_int();}
@@ -76,7 +79,7 @@ int main(int argc, char **argv)
     if (m_n<=0)
     {
         algo::utils::loadBmpFile(bmp,m_input_file);
-        w.setInitialPoints(bmp,0.1);
+        w.setInitialPoints(bmp,m_bmp_th);
     }
     else
     {
