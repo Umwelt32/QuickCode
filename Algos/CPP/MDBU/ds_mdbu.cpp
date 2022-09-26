@@ -207,13 +207,15 @@ namespace algo
             {
                 F32 e = 0;
                 U32 n = 0;
+                F32 v = 0;
                 for (U32 i=0;A->second.size()>i;++i)
                 {
                     ds_point *C = A->second[i];
                     e+=utils::dBU(C->getValue(),utils::euclideanDistance(A->first->getX(),A->first->getY(),C->getX(),C->getY()),dmax);
                     ++n;
                 }
-                if (n>0)A->first->setValue((F32)e/(F32)n);
+                if (n>0)v=(F32)e/(F32)n;
+                A->first->setValue(v);
                 FQ.push(A->first);
                 A = T.erase(A);
             }
