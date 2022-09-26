@@ -40,6 +40,7 @@ namespace algo
         F32 factor = (_max-_min);
         vc=((F32)(v-_min))/factor;
         vc=std::fabs(vc);
+        if (vc>1.0f)vc=1.0f;
         return vc;
     }
 

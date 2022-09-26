@@ -35,6 +35,7 @@ namespace algo
             void do_ds_calc(void);
             void do_recals_recurse(const S32 &mid_x,const S32 &mid_y,const U32 &n,const U32 &half,const U32 &level,const F32 &ratio);
             void copyToDataValue(void);
+            void normalizeDefinedPoints(void);
             array2d<ds_point> m_data;
             array2d<F32> m_data_value;
             std::vector<ds_point*> m_point_order;

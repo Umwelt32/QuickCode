@@ -168,10 +168,12 @@ namespace algo
         if(mdbu)
         {
             do_mdbu();
+            normalizeDefinedPoints();
             copyToDataValue();
             if(e!=NULL_PTR){e->copyFrom(getPoints());}
         }
         do_ds_calc();
+        normalizeDefinedPoints();
         copyToDataValue();
         if(out!=NULL_PTR){out->copyFrom(getPoints());}
     }
@@ -257,5 +259,44 @@ namespace algo
     array2d<F32> &ds_mdbu::getPoints(void)
     {
         return m_data_value;
+    }
+
+    void ds_mdbu::normalizeDefinedPoints(void)
+    {
+        bool is_inited = false;
+        U32 n,m;
+        F32 _min,_max;
+        m_data.getSize(n,m);
+        if (n > 0 && m > 0)
+        {
+            for (U32 i=0; i < n;++i)for (U32 j=0; j < m;++j)
+            {
+                if (m_data.get(i,j).isValid())
+                {
+                    F32 v = m_data.get(i,j).getValue();
+                    if (is_inited==false)
+                    {
+                        _min=v;
+                        _max=v;
+                        is_inited=true;
+                    }
+                    else
+                    {
+                        if (_min>v)_min=v;
+                        if (_max<v)_max=v;
+                    }
+                }
+            }
+
+            for (U32 i=0; i < n;++i)for (U32 j=0; j < m;++j)
+            {
+                if (m_data.get(i,j).isValid())
+                {
+                    F32 v = m_data.get(i,j).getValue();
+                    F32 cals =utils::normalizeF32(_min,_max,v);
+                    m_data.get(i,j).setValue(cals);
+                }
+            }
+        }
     }
 }
