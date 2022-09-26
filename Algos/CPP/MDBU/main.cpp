@@ -90,10 +90,10 @@ int main(int argc, char **argv)
     algo::utils::normalizeArray(o[1]);
     if(m_gen_all_out)
     {
-        algo::utils::saveBmpFile(o[0],m_output_file+"_1.bmp");
-        algo::utils::saveBmpFile(o[1],m_output_file+"_2.bmp");
+        algo::utils::saveBmpFile(o[0],"in_"+m_output_file);
+        algo::utils::saveBmpFile(o[1],"in_e_"+m_output_file);
         algo::utils::saveTxtFile(o[2],m_output_file+"_out.txt");
     }
-    algo::utils::saveBmpFile(o[2],m_output_file+"_out.bmp");
+    algo::utils::saveBmpFile(o[2],m_output_file);
     return 0;
 }
