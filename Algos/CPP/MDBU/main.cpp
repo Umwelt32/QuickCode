@@ -24,6 +24,7 @@ int m_n=0;
 bool m_mdbu = true;
 bool m_recurse = false;
 bool m_gen_all_out = false;
+bool extend = false;
 
 bool isParamToRead(void){return (paramnr<param_count);}
 std::string read_param_str(void){if(isParamToRead()){return std::string(params[paramnr++]);}else{return "";}}
@@ -41,6 +42,7 @@ void help_view(void)
     std::cout<<"-n <int>"<<std::endl;
     std::cout<<"-i <int>"<<std::endl;
     std::cout<<"-all_out"<<std::endl;
+    std::cout<<"-e"<<std::endl;
     std::cout<<"-r"<<std::endl;
     std::cout<<"-dis_mdbu"<<std::endl;
     std::cout<<"-help"<<std::endl;
@@ -64,6 +66,7 @@ void parse_params(int argc, char **argv)
         else if(param=="-n"){m_n=read_param_int();}
         else if(param=="-i"){algo::utils::setIConst(read_param_int());}
         else if(param=="-all_out"){m_gen_all_out=true;}
+        else if(param=="-e"){extend=true;}
         else if(param=="-r"){m_recurse=true;}
         else if(param=="-dis_mdbu"){m_mdbu=false;}
         else if(param=="-help"){help_view();exit(0);}
@@ -79,7 +82,7 @@ int main(int argc, char **argv)
     if (m_n<=0)
     {
         algo::utils::loadBmpFile(bmp,m_input_file);
-        w.setInitialPoints(bmp,m_bmp_th,true);
+        w.setInitialPoints(bmp,m_bmp_th,extend);
     }
     else
     {
