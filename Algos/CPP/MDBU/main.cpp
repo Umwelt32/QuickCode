@@ -24,7 +24,7 @@ int m_n=0;
 bool m_mdbu = true;
 bool m_recurse = false;
 bool m_gen_all_out = false;
-bool extend = false;
+bool m_extend = false;
 
 bool isParamToRead(void){return (paramnr<param_count);}
 std::string read_param_str(void){if(isParamToRead()){return std::string(params[paramnr++]);}else{return "";}}
@@ -66,7 +66,7 @@ void parse_params(int argc, char **argv)
         else if(param=="-n"){m_n=read_param_int();}
         else if(param=="-i"){algo::utils::setIConst(read_param_int());}
         else if(param=="-all_out"){m_gen_all_out=true;}
-        else if(param=="-e"){extend=true;}
+        else if(param=="-e"){m_extend=true;}
         else if(param=="-r"){m_recurse=true;}
         else if(param=="-dis_mdbu"){m_mdbu=false;}
         else if(param=="-help"){help_view();exit(0);}
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     if (m_n<=0)
     {
         algo::utils::loadBmpFile(bmp,m_input_file);
-        w.setInitialPoints(bmp,m_bmp_th,extend);
+        w.setInitialPoints(bmp,m_bmp_th,m_extend);
     }
     else
     {
@@ -93,8 +93,8 @@ int main(int argc, char **argv)
     algo::utils::normalizeArray(o[1]);
     if(m_gen_all_out)
     {
-        algo::utils::saveBmpFile(o[0],"in_"+m_output_file);
-        algo::utils::saveBmpFile(o[1],"in_e_"+m_output_file);
+        algo::utils::saveBmpFile(o[0],m_output_file+"_in_.bmp");
+        algo::utils::saveBmpFile(o[1],m_output_file+"_e_.bmp");
         algo::utils::saveTxtFile(o[2],m_output_file+"_out.txt");
     }
     algo::utils::saveBmpFile(o[2],m_output_file);
