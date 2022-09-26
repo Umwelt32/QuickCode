@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     if (m_n<=0)
     {
         algo::utils::loadBmpFile(bmp,m_input_file);
-        w.setInitialPoints(bmp,m_bmp_th);
+        w.setInitialPoints(bmp,m_bmp_th,true);
     }
     else
     {

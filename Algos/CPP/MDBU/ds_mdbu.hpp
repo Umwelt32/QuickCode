@@ -22,7 +22,7 @@ namespace algo
             void init(const U32 &n);
             void do_ds(const U32 &seed,const bool &mdbu,const bool &recurse,const F32 &h,array2d<F32> *in,array2d<F32> *e,array2d<F32> *out);
             void setPoint(const S32 &x,const S32 &y,const F32 &v);
-            void setInitialPoints(array2d<F32> &a,const F32 &th);
+            void setInitialPoints(array2d<F32> &a,const F32 &th,const bool &extend=false);
             array2d<F32> &getPoints(void);
         private:
             void set_midpoint(ds_point *point,ds_point *parent1,ds_point *parent2,ds_point *parent3,ds_point *parent4,const U32 &level,const F32 &ratio);

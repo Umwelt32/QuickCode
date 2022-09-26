@@ -231,11 +231,12 @@ namespace algo
         for (U32 i=0; i < m_point_order.size();++i){m_point_order[i]->calculate_by_parents(true);}
     }
 
-    void ds_mdbu::setInitialPoints(array2d<F32> &a,const F32 &th)
+    void ds_mdbu::setInitialPoints(array2d<F32> &a,const F32 &th,const bool &extend)
     {
         U32 w,h,w2,h2;
         a.getSize(w,h);
-        U32 n = utils::getNearPowerOf2((w+h)/2);
+        U32 n = (utils::getNearPowerOf2((w+h)/2));
+        if (extend)++n;
         m_data.clear();
         init(n);
         m_data.getSize(w2,h2);
