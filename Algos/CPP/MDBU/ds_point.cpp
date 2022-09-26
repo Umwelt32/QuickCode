@@ -31,7 +31,14 @@ namespace algo
 
     const F32 &ds_point::getValue(void) const
     {
-        return m_value;
+        if(isValid())
+        {
+            return m_value;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     void ds_point::setValue(const F32 &v)

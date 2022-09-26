@@ -210,10 +210,10 @@ namespace algo
                 for (U32 i=0;A->second.size()>i;++i)
                 {
                     ds_point *C = A->second[i];
-                    e=e+utils::dBU(C->getValue(),utils::euclideanDistance(A->first->getX(),A->first->getY(),C->getX(),C->getY()),dmax);
+                    e+=utils::dBU(C->getValue(),utils::euclideanDistance(A->first->getX(),A->first->getY(),C->getX(),C->getY()),dmax);
                     ++n;
                 }
-                A->first->setValue(e/n);
+                if (n>0)A->first->setValue((F32)e/(F32)n);
                 FQ.push(A->first);
                 A = T.erase(A);
             }
