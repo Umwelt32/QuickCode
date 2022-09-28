@@ -1,13 +1,20 @@
+##################################################
+## Author: https://github.com/Umwelt32/QuickCode
+## Copyright: 2022
+## References:
+##############
+##############
+##################################################
+
 from ursina import *
 import numpy,cv2,math
-from PIL import Image
 
-def texture_to_height_values(path, skip=1,fc=0.5):
+def texture_to_height_values(path, skip=1,fc=0.5,hf=2.0):
     heightmap = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
     skip = math.pow(skip,2)    # should be power of two. only works with heightmap, not height_values.
     width = math.floor(heightmap.shape[0]//skip)
     depth = math.floor(heightmap.shape[1]//skip)
-    hi_val = int(math.sqrt(width*depth))
+    hi_val = int(math.sqrt(width*depth))*hf
     height_values = cv2.normalize(heightmap, None, 0, 255, cv2.NORM_MINMAX)
     genColorTexture(height_values)
     height_values = (numpy.asarray(height_values)/255.0)+fc
@@ -19,22 +26,11 @@ def texture_to_height_values(path, skip=1,fc=0.5):
 
 def getRgbByGray(val):
     RGB = (0,0,0)
-    if val < 50:
-        RGB=(10,10,200)
-    elif val < 80:
-        RGB=(64,64,220)
-    elif val < 110:
-        RGB=(200,150,50)
-    elif val < 150:
-        RGB=(200,200,50)
-    elif val < 180:
-        RGB=(100,200,50)
-    elif val < 220:
-        RGB=(50,140,20)
-    elif val < 240:
-        RGB=(240,250,240)
-    else:
-        RGB=(255,255,255)
+    color_map = [[50,[50,50,255]], [75,[100,100,200]], [100,[200,150,50]], [120,[200,150,0]], [160,[0,150,50]], [200,[0,64,10]],[220,[255,255,200]],[240,[255,255,255]]]
+    for color in color_map:
+        if int(val) <= int(color[0]):
+            RGB=(color[1][0],color[1][1],color[1][2])
+            break
     BGR = (RGB[2],RGB[1],RGB[0])
     return BGR
 
@@ -50,7 +46,7 @@ def genColorTexture(gray_img):
 
 if __name__ == '__main__':
     app = Ursina()
-    Tx = texture_to_height_values(sys.argv[1], 10)
+    Tx = texture_to_height_values(sys.argv[1], 12)
     hv = Tx[0]
     EditorCamera()
     Sky()
