@@ -1,0 +1,52 @@
+I've already written a thread on the sprite file structure, but I thought I'd post a new, updated, official one.
+
+Note: A big thanks to Sketchy (http://tpforums.org/forum/user-548.html) for the help with greatly increasing the speed of reading the sprite, specifically creating a bitmap of the sprite, by replacing Bitmap.SetPixel() with BitMap.LockBits()/Bitmap.UnlockBits().
+
+- Like the Dat file structure, the sprite file begins with 4 bytes, which I call the SpriteVersion, and is unique for each client version so that the client knows that the correct sprite file is being used.
+- This is followed by 2 bytes that contains the number of sprites in the sprite file.
+
+- Immediately following this we have a 4-byte value for each sprite containing it's byte offset in the sprite file.
+
+[x] = Number of bytes.
+
+
+[4] Sprite Version
+[2] Number of sprites
+[4] Offset of the first sprite
+[4] Offset of the second sprite
+[4] Offset of the third sprite
+----Continue this for each sprite.
+
+
+- Now we start getting in to the actual sprite data. Each sprite begins with the transparent-pixels' color. In this case, the Tibia client uses magenta so the three bytes returned are 255, 0, 255. You don't need this pixel when creating the bitmap.
+- Following this is 2 bytes indicating the size of the sprite. (All sprites are 32x32 pixels, 1024 pixels, so this should never change.)
+- Next we start reading the actual pixel data of the sprite. This begins with 2 bytes holding the number of transparent pixels before colored pixel.
+
+- Then 2 bytes holding the number of colored pixels before a transparent pixel. Immediately following this is three 1-byte values holding the RGB value of the pixel. For example, if the number of colored pixels returned is 3 then you would read the next 9 bytes (3 bytes for each pixel) to get the pixel information of each.
+
+[x] = Number of bytes.
+
+
+[1] - red value of transparent pixels
+[1] - green value of transparent pixels
+[1] - blue value of transparent pixels
+[2] - number of transparent pixels
+[2] - number of colored pixels (for this example we'll say it's 3)
+[1] - red value of the first colored pixel
+[1] - green value of the first colored pixel
+[1] - blue value of the first colored pixel
+[1] - red value of the second colored pixel
+[1] - green value of the second colored pixel
+[1] - blue value of the second colored pixel
+[1] - red value of the third colored pixel
+[1] - green value of the third colored pixel
+[1] - blue value of the third colored pixel
+[2] - number of transparent pixels
+[2] - number of colored pixels
+----This will repeat for all pixels in the sprite.----
+
+
+- In the way we used to make bitmap's from the sprite data in TibiaAPI (which you can view here: http://code.google.com/p/tibiaapi/source/browse/trunk/tibiaapi/Util/SpriteReader.cs ) we used Bitmap.SetPixel() to set the pixel color in the bitmap. While this is an easy way to achieve what we want, it's also a bit slow. But, thanks to Sketchy, you can achieve a 10x speed increase by using Bitmap.LockBits() and Bitmap.UnlockBits(). (In my tests, I could load the whole 9.44 sprite file in 35 seconds using Bitmap.SetPixels(), but I could load it in just 3.5 seconds! using Bitmap.LockBits()/Bitmap.UnlockBits().)
+
+Now, here's code used to read the sprite file that you can throw in to VB.Net and run. This uses the LockBits/UnlockBits method, and I have commented the code to help you understand what's going on. The sprite structure has been the same as far back as I can remember, so you shouldn't have a problem using this code for any client version. Also, this code reads and stores each sprite in an array, but you can modify it like the TibiaAPI code to only retrieve a specific sprite. If you have any questions feel free to ask:
+
