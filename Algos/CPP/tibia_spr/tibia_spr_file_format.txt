@@ -1,0 +1,21 @@
+#
+#Tibia 7.6 sprite format
+[offset in bytes][field_size]
+---------------------------------------------------------------------------------------
+[0][4] file_version
+[4][2] sprites_count
+---------------------------------------------------------------------------------------
+... Read sprites offsets (sprites_count*4bytes of data)
+[6][4]  first sprite_offset
+[10][4] second sprite_offset
+[6+(n)*4][4] n-th sprite_offset (indexing from 0 to sprites_count-1)
+---------------------------------------------------------------------------------------
+... Read Each sprite
+[sprite_offset+0][1] Red   value of transparent pixel.
+[sprite_offset+1][1] Green value of transparent pixel.
+[sprite_offset+2][1] Blue  value of transparent pixel.
+[sprite_offset+3][2] sprite_size_in_bytes
+[sprite_offset+5][2] Number of transparent pixels (each pixel takes 3bytes of data)
+[sprite_offset+7][2] Number of color pixels (each pixel takes 3bytes of data)
+[sprite_offset+9][sprite_size_in_bytes] Sprite Data
+---------------------------------------------------------------------------------------

@@ -1,4 +1,6 @@
 #include "spr.hpp"
+#include "bitmap_image.hpp"
+#include <cmath>
 
 tibia_spr::tibia_spr()
 {
@@ -72,14 +74,41 @@ void tibia_spr::load_sprite(const U16 &idx)
     U16 spr_count = (*m_header.spr_count_2B);
     if (spr_count>idx)
     {
-        offset               =  m_header.spr_offsets_4B[idx];
-        sprite_data          =  (U8*)&m_data[offset];
-        s.transparent_rgb[0] = (*(&sprite_data[0]));
-        s.transparent_rgb[1] = (*(&sprite_data[1]));
-        s.transparent_rgb[2] = (*(&sprite_data[2]));
-        s.width              = (*(&sprite_data[3]));
-        s.heigh              = (*(&sprite_data[4]));
-        s.spr_data           = &sprite_data[5];
+        offset                  =  m_header.spr_offsets_4B[idx];
+        sprite_data             = ((U8*) &m_data[offset]);
+        s.transparent_rgb_3B    = ((U8*)(&sprite_data[0]));
+        s.sprite_size_2B        = ((U16*)&sprite_data[3]);
+        s.number_of_t_pixels_2B = ((U16*)&sprite_data[5]);
+        s.number_of_c_pixels_2B = ((U16*)&sprite_data[7]);
+        s.spr_data              = &sprite_data[9];
         m_header.sprites.push_back(s);
     }
+}
+
+void tibia_spr::save_spr(const std::string &path,const U16 &idx)
+{
+    tibia_sprite *s=&(this->getHeader().sprites[idx]);
+    U16 t_pixels_count = (*s->number_of_t_pixels_2B);
+    U16 c_pixels_count = (*s->number_of_c_pixels_2B);
+    U16 sprite_size_bytes = (*s->sprite_size_2B);;
+    U16 pixels_count   = (t_pixels_count+c_pixels_count);
+    U16 square_size = std::floor(std::sqrt(pixels_count));
+    bitmap_image image(square_size,square_size);
+    image.set_all_channels(s->transparent_rgb_3B[0], s->transparent_rgb_3B[1], s->transparent_rgb_3B[2]);
+    std::cout<<"tpc: "<<t_pixels_count<<std::endl;
+    std::cout<<"cpc: "<<c_pixels_count<<std::endl;
+    std::cout<<"pc: "<<pixels_count<<std::endl;
+    std::cout<<"sq: "<<square_size<<std::endl;
+    std::cout<<"ss: "<<sprite_size_bytes<<std::endl;
+    std::cout<<"ss/pc: "<<(sprite_size_bytes/pixels_count)<<std::endl;
+    for (U16 i=0;i<pixels_count;++i)
+    {
+        U8 R=s->spr_data[3*i];
+        U8 G=s->spr_data[3*i+1];
+        U8 B=s->spr_data[3*i+2];
+        U16 X = std::floor(i%square_size);
+        U16 Y = std::floor(i/square_size);
+        image.set_pixel(X,Y,R,G,B);
+    }
+    image.save_image(path);
 }

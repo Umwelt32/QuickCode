@@ -1,0 +1,34 @@
+# depslib dependency file v1.0
+1666963781 source:z:\test\spr\sprex\main.cpp
+	<iostream>
+	"spr.hpp"
+
+1666601121 source:z:\test\spr\sprex\utils.cpp
+
+1666965662 source:z:\test\spr\sprex\spr.cpp
+	"spr.hpp"
+	"bitmap_image.hpp"
+	<cmath>
+
+1666962329 z:\test\spr\sprex\spr.hpp
+	"utils.hpp"
+
+1666703064 z:\test\spr\sprex\utils.hpp
+	<iostream>
+	<fstream>
+	<cstdio>
+	<cmath>
+	<vector>
+
+1664329798 z:\test\spr\sprex\bitmap_image.hpp
+	<algorithm>
+	<cmath>
+	<cstdlib>
+	<cstring>
+	<fstream>
+	<iostream>
+	<iterator>
+	<limits>
+	<string>
+	<vector>
+

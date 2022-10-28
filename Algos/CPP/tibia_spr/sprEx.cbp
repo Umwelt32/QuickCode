@@ -32,6 +32,7 @@
 			<Add option="-Weverything" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="bitmap_image.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="spr.cpp" />
 		<Unit filename="spr.hpp" />
