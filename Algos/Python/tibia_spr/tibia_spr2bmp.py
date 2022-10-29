@@ -41,6 +41,26 @@ def load_sprite(sprite_idx):
     package = {'transparent_key':transparent_key,'sprite_size':sprite_size,'total_pixels':total_pixels,'sprite_n':sprite_n,'sprite_data':sprite_data}
     return package
 
+def sprite_data(idx):
+    global m_sprites
+    i=0
+    sprite = m_sprites[idx]
+    n = sprite['sprite_n']
+    data = numpy.array(sprite['sprite_data'])
+    blank_image = numpy.zeros((n,n,3), numpy.uint8)
+    for y in range(n):
+        for x in range(n):
+            if len(data)>(i+2):
+                pixel = (data[i+2],data[i+1],data[i])
+                blank_image[x,y]=pixel
+                i=i+3
+    return blank_image
+
+def ex_sprites_to_dir(path):
+    global m_sprites_count
+    [cv2.imwrite(path+'/'+str(x)+'.bmp', sprite_data(x)) for x in range(m_sprites_count)]
+
 if __name__ == "__main__":
     load_file('Tibia.spr')
+    ex_sprites_to_dir('./out')
     exit(0)
