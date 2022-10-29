@@ -22,22 +22,22 @@ def load_file(path):
     global m_file_handle
     global m_sprites
     m_file_handle     = open(path, "rb")
-    m_file_ver        = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0]
-    m_sprites_count   = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
+    m_file_ver        = int(numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0])
+    m_sprites_count   = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
     m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count)
-    m_sprites         = [load_sprite(offset) for offset in m_sprites_offsets]
+    m_sprites         = [load_sprite(x) for x in range(m_sprites_count)]
 
 def load_sprite(sprite_idx):
     global m_file_handle
     global m_sprites_offsets
     if sprite_idx  != None: m_file_handle.seek(m_sprites_offsets[sprite_idx], 0)
     transparent_key = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=3)
-    sprite_size     = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
-    t_pixels_number = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
-    c_pixels_number = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
+    sprite_size     = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
+    t_pixels_number = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
+    c_pixels_number = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
     sprite_data     = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=sprite_size)
-    total_pixels    = t_pixels_number+c_pixels_number
-    sprite_n        = math.floor(math.sqrt(total_pixels))
+    total_pixels    = int(t_pixels_number+c_pixels_number)
+    sprite_n        = int(math.floor(math.sqrt(total_pixels)))
     package = {'transparent_key':transparent_key,'sprite_size':sprite_size,'total_pixels':total_pixels,'sprite_n':sprite_n,'sprite_data':sprite_data}
     return package
 
