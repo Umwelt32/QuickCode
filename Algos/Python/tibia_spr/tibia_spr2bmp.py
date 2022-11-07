@@ -26,6 +26,7 @@ def load_file(path):
     m_sprites_count   = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
     m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count)
     m_sprites         = [load_sprite(x) for x in range(m_sprites_count)]
+    m_file_handle.close()
 
 def load_sprite(sprite_idx):
     global m_file_handle
