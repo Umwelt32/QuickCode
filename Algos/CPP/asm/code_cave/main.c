@@ -1,3 +1,10 @@
+      /*---------------------------------------------------------*/
+     /* Author: https://github.com/Umwelt32/QuickCode           */
+    /* Copyright: 2022                                         */
+   /* Code incjection                                         */
+  /* References:                                             */
+ /* https://en.wikipedia.org/wiki/Code_cave                 */
+/*---------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
