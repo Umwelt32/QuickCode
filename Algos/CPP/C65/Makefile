@@ -8,7 +8,7 @@ DIR_CUR:=./
 
 DEL:= DEL /Q /F 
 CC := cl65
-CFLAGS := -g -Oi
+CFLAGS := -g -Oi -t nes
 TARGET := PROGRAM.BIN
 
 # $(wildcard *.cpp /xxx/xxx/*.cpp): get all .cpp files from the current directory and dir "/xxx/xxx/"
