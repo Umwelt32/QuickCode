@@ -1,0 +1,14 @@
+<shaders>
+    <shader>
+        <enabled>1</enabled>
+        <name type="triangles">cube0</name>
+        <vs_file>vs.txt</vs_file>
+        <fs_file>fs.txt</fs_file>
+    </shader>
+    <shader>
+        <enabled>1</enabled>
+        <name type="quads">plane0</name>
+        <vs_file>f_vs.txt</vs_file>
+        <fs_file>f_fs.txt</fs_file>
+    </shader>
+</shaders>

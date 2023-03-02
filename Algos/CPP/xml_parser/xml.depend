@@ -1,0 +1,105 @@
+# depslib dependency file v1.0
+1677769992 source:o:\project_sdl\xml_parser\main.cpp
+	<iostream>
+	"import_xml.hpp"
+
+1677768039 source:o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\irrxml.cpp
+	"irrXML.h"
+	"irrString.h"
+	"irrArray.h"
+	"fast_atof.h"
+	"CXMLReaderImpl.h"
+	"defs.hpp"
+	"io.hpp"
+
+1677490379 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\irrxml.h
+	<stdio.h>
+	<irrXML.h>
+	<string>
+	<irrXML.h>
+	<irrXML.h>
+	<irrXML.h>
+
+1124564592 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\irrstring.h
+	"irrTypes.h"
+
+1124890238 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\irrtypes.h
+
+1124564592 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\irrarray.h
+	"irrTypes.h"
+	"heapsort.h"
+
+1124561864 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\heapsort.h
+	"irrTypes.h"
+
+1124561874 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\fast_atof.h
+	<stdlib.h>
+	<math.h>
+
+1131808752 o:\project_sdl\xml_parser\external_parts\irrxml-1.2\src\cxmlreaderimpl.h
+	"irrXML.h"
+	"irrString.h"
+	"irrArray.h"
+	"fast_atof.h"
+
+1677766462 o:\project_sdl\xml_parser\xml\defs.hpp
+	<cstdio>
+	<iostream>
+	<vector>
+	<memory>
+	<map>
+	<stdio.h>
+	<string.h>
+	<string_view>
+	<stdexcept>
+
+1677767338 source:o:\project_sdl\xml_parser\xml\xmlfile.cpp
+	"xmlfile.hpp"
+	"xmlnode.hpp"
+	<irrXML.h>
+	<utility>
+
+1677767467 o:\project_sdl\xml_parser\xml\xmlfile.hpp
+	"ixmlnode.hpp"
+	"ixmlfile.hpp"
+
+1677767426 o:\project_sdl\xml_parser\xml\ixmlnode.hpp
+	"defs.hpp"
+	<vector>
+	<map>
+
+1677767376 o:\project_sdl\xml_parser\xml\ixmlfile.hpp
+	"ixmlnode.hpp"
+
+1677767540 o:\project_sdl\xml_parser\xml\xmlnode.hpp
+	<vector>
+	<map>
+	"ixmlnode.hpp"
+
+1677767615 source:o:\project_sdl\xml_parser\xml\xmlnode.cpp
+	"xmlnode.hpp"
+	"utils.hpp"
+
+1677766782 o:\project_sdl\xml_parser\xml\utils.hpp
+	"defs.hpp"
+
+1677766798 source:o:\project_sdl\xml_parser\xml\utils.cpp
+	"utils.hpp"
+	"defs.hpp"
+	<algorithm>
+
+1677768537 source:o:\project_sdl\xml_parser\io.cpp
+	"io.hpp"
+	<fstream>
+
+1677767958 o:\project_sdl\xml_parser\io.hpp
+	"defs.hpp"
+
+1677768842 source:o:\project_sdl\xml_parser\xml\import_xml.cpp
+	"import_xml.hpp"
+	"xmlfile.hpp"
+
+1677768785 o:\project_sdl\xml_parser\xml\import_xml.hpp
+	"defs.hpp"
+	"ixmlfile.hpp"
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="xml" />
+		<Option pch_mode="2" />
+		<Option compiler="clang" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/xml" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="clang" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="xml" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/" />
+				<Option type="1" />
+				<Option compiler="clang" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Weverything" />
+			<Add option="-fexceptions" />
+			<Add directory="xml" />
+			<Add directory="external_parts/irrxml-1.2/src" />
+			<Add directory="." />
+		</Compiler>
+		<Unit filename="external_parts/irrxml-1.2/src/CXMLReaderImpl.h" />
+		<Unit filename="external_parts/irrxml-1.2/src/fast_atof.h" />
+		<Unit filename="external_parts/irrxml-1.2/src/heapsort.h" />
+		<Unit filename="external_parts/irrxml-1.2/src/irrArray.h" />
+		<Unit filename="external_parts/irrxml-1.2/src/irrString.h" />
+		<Unit filename="external_parts/irrxml-1.2/src/irrTypes.h" />
+		<Unit filename="external_parts/irrxml-1.2/src/irrXML.cpp" />
+		<Unit filename="external_parts/irrxml-1.2/src/irrXML.h" />
+		<Unit filename="io.cpp" />
+		<Unit filename="io.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="xml/defs.hpp" />
+		<Unit filename="xml/import_xml.cpp" />
+		<Unit filename="xml/import_xml.hpp" />
+		<Unit filename="xml/ixmlfile.hpp" />
+		<Unit filename="xml/ixmlnode.hpp" />
+		<Unit filename="xml/utils.cpp" />
+		<Unit filename="xml/utils.hpp" />
+		<Unit filename="xml/xmlfile.cpp" />
+		<Unit filename="xml/xmlfile.hpp" />
+		<Unit filename="xml/xmlnode.cpp" />
+		<Unit filename="xml/xmlnode.hpp" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
