@@ -1,3 +1,12 @@
+
+##################################################
+## Author: https://github.com/Umwelt32/QuickCode
+## Copyright: 2023
+## save file data as byte-hex values
+## References:
+##############
+##############
+##################################################
 import os,sys,math,numpy
 
 def save_file(path,data):
