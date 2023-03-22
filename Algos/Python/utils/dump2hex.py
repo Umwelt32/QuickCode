@@ -13,6 +13,15 @@ def load2hex(path):
     return data_list_comma
     
 if __name__ == "__main__":
-    input_file_path = str(sys.argv[1])
-    save_file(input_file_path.replace('.','_')+'.txt',load2hex(input_file_path))
-    exit(0x0)
+    if (len(sys.argv) > 1):
+        input_file_path = str(sys.argv[1])
+        try:
+            save_file(input_file_path.replace('.','_')+'.txt',load2hex(input_file_path))
+        except:
+            print('error: exception occurs!')
+            exit(0x1)
+        else:
+            exit(0x0)
+    else:
+        print('no input file in script parameter!')
+        exit(0x1)
