@@ -64,10 +64,11 @@ void bmpwriter_save(const char *path)
     FILE* file_handle;
     void *header_p   = (void*)&_bmp_header[0];
     void *bgr_data_p = (void*)&_BGR_Buffer_p[0];
-    int bgr_offset=_bmpwriter_read_int(header_p,10,4);          /*bgr_offset_pu32:10bytes*/
-    _bmpwriter_write_int(_BGR_buffer_size_u32,header_p,2,4);   /*file_size_pu32:2bytes  */
-    _bmpwriter_write_int(_BMP_W,header_p,18,4);               /*bmp_w_p32:      18bytes*/
-    _bmpwriter_write_int(_BMP_H,header_p,22,4);              /*bmp_h_p32:      22bytes*/
+    int bgr_offset=_bmpwriter_read_int(header_p,10,4);            /*bgr_offset_pu32:    10bytes*/
+    _bmpwriter_write_int(_BGR_buffer_size_u32,header_p,2,4);     /*file_size_pu32:    2bytes  */
+    _bmpwriter_write_int(_BMP_W,header_p,18,4);                 /*bmp_w_p32:          18bytes*/
+    _bmpwriter_write_int(_BMP_H,header_p,22,4);                /*bmp_h_p32:          22bytes*/
+    _bmpwriter_write_int(_BGR_buffer_size_u32,header_p,34,4); /*bgr_data_size_u32:  34bytes*/
     file_handle = fopen(path,"wb");
     fwrite(header_p,1,bgr_offset,file_handle);
     fwrite(bgr_data_p,1,_BGR_buffer_size_u32,file_handle);
