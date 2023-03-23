@@ -9,12 +9,17 @@
 ##################################################
 import os,sys,math,numpy
 
-def save_file(path,data):
+def save_file(path,data,nlines):
+    idx=0
     f = open(path, "w")
-    for line in data:
-        f.write(str(line))
+    for c in data:
+        f.write(str(c))
+        if nlines>0 and idx>=nlines:
+            f.write('\n')
+            idx=0
+        idx=idx+1
     f.close()
-    
+
 def load2hex(path):
     data = numpy.fromfile(str(path),dtype=numpy.ubyte)
     data_list = [str(hex(x)) for x in data]
@@ -25,7 +30,7 @@ if __name__ == "__main__":
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
         try:
-            save_file(input_file_path.replace('.','_')+'.txt',load2hex(input_file_path))
+            save_file(input_file_path.replace('.','_')+'.txt',load2hex(input_file_path),256)
         except:
             print('error: exception occurs!')
             exit(0x1)
