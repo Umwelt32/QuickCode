@@ -39,3 +39,4 @@ if __name__ == "__main__":
     else:
         print('no input file in script parameter!')
         exit(0x1)
+
