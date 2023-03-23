@@ -20,9 +20,15 @@ def save_file(path,data,nlines):
         idx=idx+1
     f.close()
 
+def int2hex(v):
+    s = str(hex(int(v)))
+    if len(s)<4:
+        s=s.replace('0x','0x0')
+    return str(str(str(s).upper()).replace('X','x'))
+
 def load2hex(path):
     data = numpy.fromfile(str(path),dtype=numpy.ubyte)
-    data_list = [str(hex(x)) for x in data]
+    data_list = [str(int2hex(x)) for x in data]
     data_list_comma = ','.join(data_list)
     return data_list_comma
     
@@ -40,3 +46,4 @@ if __name__ == "__main__":
         print('no input file in script parameter!')
         exit(0x1)
 
+        
