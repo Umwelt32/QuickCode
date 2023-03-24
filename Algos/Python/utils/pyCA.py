@@ -48,30 +48,37 @@ def ca_recal_nb_values(m):
             grid[x,y]['nb_value']=ca_calc_nb(x,y,m,1)
             grid[x,y]['fl_value']=ca_calc_nb(x,y,m,0)
 
-def ca_recal_types(T):
+def ca_recal_rocks(T):
     global grid
     for x in range(grid.shape[0]):
         for y in range(grid.shape[1]):
             grid[x,y]['type']=1 if grid[x,y]['nb_value']>=T else 0
 
+def ca_recal_walls():
+    global grid
+    for x in range(grid.shape[0]):
+        for y in range(grid.shape[1]):
+            if grid[x,y]['fl_value']>0 and grid[x,y]['type']==1: grid[x,y]['type']=2
+
 def ca_iterate_once(t,m):
     global grid
     ca_recal_nb_values(m)
-    ca_recal_types(t)
+    ca_recal_rocks(t)
 
 def ca_iterate(n,t,m):
     global grid
     for x in range(n):
         ca_iterate_once(t,m)
+    ca_recal_walls()
 
 def ca_save_grid_im(filename):
     global grid
     img = numpy.zeros(shape=(grid.shape[0],grid.shape[1]), dtype=numpy.uint8)
-    img[:,:]=grid[:,:]['type']*255
+    img[:,:]=(grid[:,:]['type']*255)/2
     cv2.imwrite(filename, img)
 
 if __name__ == "__main__":
     ca_init(128,0.25,256,256)
-    ca_iterate(8,5,1)
+    ca_iterate(16,16,2)
     ca_save_grid_im('out.bmp')
     exit(0x1)
