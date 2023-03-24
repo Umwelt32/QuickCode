@@ -31,6 +31,7 @@ void ca_pcg::init(const U16 &w,const U16 &h)
         m_cells.getPtr(i,j)->m_y=j;
         m_cells.getPtr(i,j)->type=CA_CELL_TYPE_FLOOR;
         m_cells.getPtr(i,j)->neightborhood_value=0;
+        m_cells.getPtr(i,j)->floor_value=0;
     }
 }
 
@@ -45,18 +46,7 @@ void ca_pcg::recalculate_all_nv_value(const S16 &M)
     }
 }
 
-void ca_pcg::reset_all_to_type(const U8 &type)
-{
-    U32 w,h;
-    m_cells.getSize(w,h);
-    for (S32 i=0;i<w;++i)
-    for (S32 j=0;j<h;++j)
-    {
-        m_cells.getPtr(i,j)->type=type;
-    }
-}
-
-void ca_pcg::random_set_to_type(const U8 &type,const F32 &r)
+void ca_pcg::random_set(const F32 &r)
 {
     U32 w,h;
     m_cells.getSize(w,h);
@@ -64,7 +54,7 @@ void ca_pcg::random_set_to_type(const U8 &type,const F32 &r)
     for (S32 j=0;j<h;++j)
     {
         F32 v = getUniformRandomValue();
-        if(v<=r){m_cells.getPtr(i,j)->type=type;}
+        m_cells.getPtr(i,j)->type=(v<=r)?CA_CELL_TYPE_ROCK:CA_CELL_TYPE_FLOOR;
     }
 }
 
@@ -88,10 +78,9 @@ F32 ca_pcg::getUniformRandomValue(void)
     return frnd;
 }
 
-void ca_pcg::reset(const F32 &r,const S16 &M)
+void ca_pcg::reset(const F32 &r)
 {
-    this->reset_all_to_type(CA_CELL_TYPE_FLOOR);
-    this->random_set_to_type(CA_CELL_TYPE_ROCK,r);
+    this->random_set(r);
 }
 
 void ca_pcg::saveToIo(std::ostream &s)
@@ -186,7 +175,7 @@ void ca_pcg::recalculate_rocks(const U16 &T)
 void ca_pcg::generate(const U16 &seed,const F32 &r,const U16 &N,const S16 &T,const S16 &M)
 {
     this->setSeed(seed);
-    this->reset(r,M);
+    this->reset(r);
     this->iterate_n_epoch(N,T,M);
     this->recalculate_walls();
 }

@@ -25,12 +25,11 @@ class ca_pcg
     private:
         void setSeed(const U16 &seed);
         void iterate_n_epoch(const U16 &N,const S16 &T,const S16 &M);
-        void reset(const F32 &r,const S16 &M);
+        void reset(const F32 &r);
         void recalculate_walls(void);
         void recalculate_rocks(const U16 &T);
         void recalculate_nv_for_node(ca_node_t *node,const S16 &M);
-        void reset_all_to_type(const U8 &type);
-        void random_set_to_type(const U8 &type,const F32 &r);
+        void random_set(const F32 &r);
         void recalculate_all_nv_value(const S16 &M);
         void iterate_once(const S16 &T,const S16 &M);
         F32 getUniformRandomValue(void);
