@@ -72,19 +72,8 @@ void ca_pcg::iterate_once(const S16 &T,const S16 &M)
 {
     U32 w,h;
     m_cells.getSize(w,h);
-    for (S32 i=0;i<w;++i)
-    for (S32 j=0;j<h;++j)
-    {
-        if(m_cells.getPtr(i,j)->neightborhood_value>=T)
-        {
-            m_cells.getPtr(i,j)->type=CA_CELL_TYPE_ROCK;
-        }
-        else
-        {
-            m_cells.getPtr(i,j)->type=CA_CELL_TYPE_FLOOR;
-        }
-    }
     recalculate_all_nv_value(M);
+    recalculate_rocks(T);
 }
 
 void ca_pcg::iterate_n_epoch(const U16 &N,const S16 &T,const S16 &M)
@@ -103,7 +92,6 @@ void ca_pcg::reset(const F32 &r,const S16 &M)
 {
     this->reset_all_to_type(CA_CELL_TYPE_FLOOR);
     this->random_set_to_type(CA_CELL_TYPE_ROCK,r);
-    recalculate_all_nv_value(M);
 }
 
 void ca_pcg::saveToIo(std::ostream &s)
@@ -137,16 +125,14 @@ void ca_pcg::recalculate_nv_for_node(ca_node_t *node,const S16 &M)
     if (M<=0)return;
     point2d_t S(node->m_x,node->m_y);
     point2d_t A(S.x-M,S.y-M);/*AABB*/
-    point2d_t B(S.x+M,S.y+M);
-    for (S16 i=A.x;i<=B.x;++i)
-    for (S16 j=A.y;j<=B.y;++j)
+    point2d_t B(S.x+M+1,S.y+M+1);
+    for (S16 i=A.x;i<B.x;++i)
+    for (S16 j=A.y;j<B.y;++j)
     {
         ca_node_t *current=m_cells.getPtr(i,j);
         if(current == nullptr)continue;
         if((S.x==i)&&(S.y==j))continue;
-        if(current->type==CA_CELL_TYPE_ROCK){++nv;}
-        else if(current->type==CA_CELL_TYPE_FLOOR){++floors;}
-        else {;}
+        if(current->type==CA_CELL_TYPE_ROCK){++nv;}else if(current->type==CA_CELL_TYPE_FLOOR){++floors;}else {;}
     }
     node->neightborhood_value=nv;
     node->floor_value=floors;
@@ -183,6 +169,17 @@ void ca_pcg::recalculate_walls()
                 current->type=CA_CELL_TYPE_WALL;
             }
         }
+    }
+}
+
+void ca_pcg::recalculate_rocks(const U16 &T)
+{
+    U32 w,h;
+    m_cells.getSize(w,h);
+    for (S32 i=0;i<w;++i)for (S32 j=0;j<h;++j)
+    {
+        ca_node_t *current=m_cells.getPtr(i,j);
+        current->type=(current->neightborhood_value>=T)?CA_CELL_TYPE_ROCK:CA_CELL_TYPE_FLOOR;
     }
 }
 
