@@ -2,7 +2,7 @@
 ##################################################
 ## Author: https://github.com/Umwelt32/QuickCode
 ## Copyright: 2023
-## save file data as byte-hex values
+## Cellural automata
 ## References:
 ##############
 ##############
@@ -24,7 +24,7 @@ def ca_init(seed,r,w,h):
     global grid
     ca_set_random_seed(seed)
     basic_grid = numpy.zeros(shape=(w,h), dtype=[('type', 'i4'), ('nb_value', 'i4'),('fl_value', 'i4')])
-    basic_grid[:,:]['type'] = numpy.array([ca_random_01(r if r<1.0 else 1.0) for x in range(h*w)]).reshape(800,600)
+    basic_grid[:,:]['type'] = numpy.array([ca_random_01(r if r<1.0 else 1.0) for x in range(h*w)]).reshape(w,h)
     grid = basic_grid
 
 def ca_calc_nb(x,y,m,type):
@@ -67,13 +67,11 @@ def ca_iterate(n,t,m):
 def ca_save_grid_im(filename):
     global grid
     img = numpy.zeros(shape=(grid.shape[0],grid.shape[1]), dtype=numpy.uint8)
-    for x in range(grid.shape[0]):
-        for y in range(grid.shape[1]):
-            img[x,y]=grid[x,y]['type']*255
+    img[:,:]=grid[:,:]['type']*255
     cv2.imwrite(filename, img)
 
 if __name__ == "__main__":
-    ca_init(128,0.25,800,600)
+    ca_init(128,0.25,256,256)
     ca_iterate(8,5,1)
     ca_save_grid_im('out.bmp')
     exit(0x1)
