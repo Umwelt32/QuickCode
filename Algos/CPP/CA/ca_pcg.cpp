@@ -1,6 +1,7 @@
 #include "ca_pcg.hpp"
 #include "bmpwriter.hpp"
 #include <fstream>
+#include <cmath>
 
 typedef enum
 {
@@ -178,6 +179,16 @@ void ca_pcg::generate(const U16 &seed,const F32 &r,const U16 &N,const S16 &T,con
     this->reset(r);
     this->iterate_n_epoch(N,T,M);
     this->recalculate_walls();
+}
+
+void ca_pcg::generate_f(const U16 &seed,const F32 &r,const U16 &N,const F32 &M_F,const S16 &M)
+{
+    S16 T_P1=((2*M)+1);
+    S16 T_P2=((T_P1*T_P1)-1);
+    F32 T_F=T_P2*M_F;
+    S16 T  = std::ceil(T_F);
+    if (T_P2<T)T=T_P2;
+    this->generate(seed,r,N,T,M);
 }
 
 void ca_pcg::setSeed(const U16 &seed)

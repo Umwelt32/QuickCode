@@ -6,11 +6,11 @@ static U32 paramnr=0;
 static U32 param_count=0;
 static char **params=nullptr;
 static U32 m_seed = 128u;
-static U32 m_w = 256u;
-static U32 m_h = 256u;
+static U32 m_w = 1024u;
+static U32 m_h = 1024u;
 static U32 m_n = 16u;
-static U32 m_m = 2u;
-static U32 m_t = 16u;
+static U32 m_m = 3u;
+static F32 m_t = 0.64f;
 static F32 m_r = 0.75f;
 std::string m_output_file="bitmap_out.bmp";
 
@@ -26,7 +26,7 @@ void help_view(void)
     std::cout<<"-out <file>"<<std::endl;
     std::cout<<"-n <int>"<<std::endl;
     std::cout<<"-r <float>"<<std::endl;
-    std::cout<<"-t <int>"<<std::endl;
+    std::cout<<"-t <float>"<<std::endl;
     std::cout<<"-m <int>"<<std::endl;
     std::cout<<"-w <int>"<<std::endl;
     std::cout<<"-h <int>"<<std::endl;
@@ -50,16 +50,17 @@ void parse_params(int argc, char **argv)
         else if(param=="-r"){m_r=read_param_f();}
         else if(param=="-n"){m_n=read_param_int();}
         else if(param=="-m"){m_m=read_param_int();}
-        else if(param=="-t"){m_t=read_param_int();}
+        else if(param=="-t"){m_t=read_param_f();}
         else if(param=="-help"){help_view();exit(0);}
     }
 }
 
 int main(int argc, char **argv)
 {
+    parse_params(argc,argv);
     ca_pcg node;
     node.init(m_w,m_h);
-    node.generate(m_seed,m_r,m_n,m_t,m_m);
+    node.generate_f(m_seed,m_r,m_n,m_t,m_m);
     node.saveToBmp(m_output_file.c_str());
     return 0;
 }

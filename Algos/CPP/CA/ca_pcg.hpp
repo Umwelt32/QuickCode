@@ -18,7 +18,8 @@ class ca_pcg
         ca_pcg();
         ~ca_pcg();
         void init(const U16 &w,const U16 &h);
-        void generate(const U16 &seed,const F32 &r,const U16 &N,const S16 &T,const S16 &M);
+        void generate(const U16 &seed,const F32 &r,const U16 &N,const S16 &T  ,const S16 &M);
+        void generate_f(const U16 &seed,const F32 &r,const U16 &N,const F32 &M_F,const S16 &M);
         void saveToIo(std::ostream &s);
         void saveToFile(const std::string &path);
         void saveToBmp(const std::string &path);
@@ -35,4 +36,3 @@ class ca_pcg
         F32 getUniformRandomValue(void);
         array2d<ca_node_t> m_cells;
 };
-
