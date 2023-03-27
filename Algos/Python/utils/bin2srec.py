@@ -1,49 +1,77 @@
 import os,sys,math,numpy
 
-m_file_data = None
+def srec_bin2hex(path,addr_offset,line_size):
+    output_data = ['S00F000068656C6C6F202020202000003C']
+    file_data   = numpy.fromfile(str(path),dtype=numpy.ubyte)
+    #file_data   = numpy.fromfile(str(path),dtype=numpy.ubyte, count=-1, offset=0, *, like=None)
+    line_size   = min(line_size,0xFF)
+    line_size   = max(line_size,0x00)
+    return output_data
 
-def srec_load_data(path):
-    global m_file_data
-    m_file_data = numpy.fromfile(str(path),dtype=numpy.ubyte)
-
-def srec_get_srec(addr_width,base_addr,data):
+def _srec_get_srec_reg(addr_width,base_addr,data):
     byte_count      = len(data)
-    addr_width      = min(addr_width,4)
-    addr_width      = max(addr_width,2)
+    addr_width      = min(addr_width,0x04)
+    addr_width      = max(addr_width,0x02)
     header          = ['XX','XX','S1','S2','S3','XX','XX']
-    byte_count_u8   = numpy.uint8(byte_count+addr_width+1)
+    byte_count_u8   = numpy.uint8(byte_count+addr_width+0x01)
     base_addr_u32   = numpy.uint32(base_addr)
-    base_addr_au32  = srec_int2array(base_addr_u32,addr_width)
-    checksum_u16    = numpy.uint16(0)
+    base_addr_au32  = _srec_int2array(base_addr_u32,addr_width)
     complement_data = numpy.array([byte_count_u8],dtype=numpy.uint8)
     complement_data = numpy.append(complement_data,base_addr_au32)
     complement_data = numpy.append(complement_data,numpy.array(data,dtype=numpy.uint8))
-    for x in complement_data: checksum_u16=checksum_u16+x
-    checksum_u16   = numpy.uint16(numpy.bitwise_and(checksum_u16,0xFFFF))
-    checksum_u8    = numpy.uint8(0xFF - numpy.uint8(numpy.bitwise_and(checksum_u16,0xFF)))
-    checksum_au8   = numpy.array([checksum_u8],dtype=numpy.uint8)
+    checksum_u8     = _srec_calc_checksum(complement_data)
+    checksum_au8    = numpy.array([checksum_u8],dtype=numpy.uint8)
     complement_data = numpy.append(complement_data,checksum_au8)
-    srec_complete = str(header[addr_width])+''+str(srec_array2string(complement_data))
+    srec_complete   = str(header[addr_width])+''+str(_srec_array2string(complement_data))
     return srec_complete
 
-def srec_array2string(data):
+def _srec_calc_checksum(data_array):
+    data_array_au8 = numpy.array(data_array,dtype=numpy.uint8)
+    checksum_u16   = data_array_au8.sum(dtype=numpy.uint16)
+    checksum_u16   = numpy.uint16(numpy.bitwise_and(checksum_u16,0xFFFF))
+    checksum_u8    = numpy.uint8(0xFF - numpy.uint8(numpy.bitwise_and(checksum_u16,0xFF)))
+    return checksum_u8
+    
+def srec_gen_count_reg(lines_count):
+    header = ['S5','S5','S5','S6','S6','S6']
+    lines_count_u32 = numpy.uint32(lines_count)
+    size_bytes = 0x02 if lines_count_u32>0xFFFF else 0x03
+    byte_count_au8  = numpy.array([numpy.uint8(size_bytes+0x01)])
+    lines_count_au8 = _srec_int2array(lines_count_u32,size_bytes)
+    complement_data = numpy.append(byte_count_au8,lines_count_au8)
+    checksum_u8     = _srec_calc_checksum(complement_data)
+    checksum_au8    = numpy.array([checksum_u8],dtype=numpy.uint8)
+    complement_data = numpy.append(complement_data,checksum_au8)
+    srec_complete   = str(header[addr_width])+''+str(_srec_array2string(complement_data))
+    return srec_complete
+
+def srec_gen_terminator_reg(addr_width):
+    header = ['S9','S9','S9','S8','S7','S7']
+    addr_width  = min(addr_width,0x04)
+    addr_width  = max(addr_width,0x02)
+    addr_width_u32 = numpy.uint32(addr_width)
+    terminator = '030000FC'
+    srec_complete = str(header[addr_width])+str(terminator)
+    return srec_complete
+
+def _srec_array2string(data):
     srec=''
-    for x in data:srec=srec+str(srec_int2hex(x)).replace('0x','')
+    for x in data:srec=srec+str(_srec_int2hex(x)).replace('0x','')
     return srec
 
-def srec_get_byte(value,byte):
+def _srec_get_byte(value,byte):
     value_u32  = numpy.uint32(value)
     return numpy.uint8(numpy.bitwise_and(numpy.right_shift(value_u32,byte*8),0xFF))
     
-def srec_int2array(value,size):
+def _srec_int2array(value,size):
     value_u32  = numpy.uint32(value)
     size = min(size,4)
     size = max(size,1)
-    int2array = numpy.array([srec_get_byte(value,x) for x in range(size)], dtype=numpy.uint8)
+    int2array = numpy.array([_srec_get_byte(value,x) for x in range(size)], dtype=numpy.uint8)
     int2array_flip = numpy.flip(int2array)
     return int2array_flip
 
-def srec_int2hex(v):
+def _srec_int2hex(v):
     s = str(hex(int(v)))
     if len(s)<4:
         s=s.replace('0x','0x0')
