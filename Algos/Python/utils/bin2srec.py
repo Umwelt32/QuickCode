@@ -1,6 +1,22 @@
 import os,sys,math,numpy
 
-def srec_bin2hex(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
+def srec_bin2rec_save_file(path,out_file='',addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
+    result=True
+    try:
+        output_file = str(out_file) if len(str(out_file))>0 else path.replace('.','_')+'.srec'
+        print('input file: '+str(path))
+        print('output file: '+str(output_file))
+        data = srec_bin2rec(path,addr_offset,line_size,addr_width,file_offset)
+        _srec_save_file(output_file,data)
+    except:
+        print('error occures!')
+        result=False
+    else:
+        print('done!')
+        result=True
+    return result
+
+def srec_bin2rec(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
     header_data = 'S00F000068656C6C6F202020202000003C'
     file_data   = numpy.fromfile(str(path),offset=file_offset,dtype=numpy.ubyte)
     line_size   = min(line_size,0xFF)
@@ -15,7 +31,12 @@ def srec_bin2hex(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0
     output_data.append(srec_count)
     output_data.append(srec_terminator)
     return output_data
-
+    
+def _srec_save_file(path,data):
+    f = open(str(path), "w")
+    for line in data: f.write(str(line))
+    f.close()
+    
 def _srec_get_srec_reg(addr_width,base_addr,data):
     byte_count      = len(data)
     addr_width      = min(addr_width,0x04)
@@ -86,16 +107,10 @@ def _srec_int2hex(v):
     return str(str(str(s).upper()).replace('X','x'))
     
 if __name__ == "__main__":
-    print('=>'+str(srec_get_srec(2,0x01C,[0x4B,0xFF,0xFF,0xE5,0x39,0x80,0x00,0x00,0x7D,0x83,0x63,0x78,0x80,0x01,0x00,0x14,0x38,0x21,0x00,0x10,0x7C,0x08,0x03,0xA6,0x4E,0x80,0x00,0x20])))
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
-        try:
-            save_file(input_file_path.replace('.','_')+'.txt',load2hex(input_file_path),256)
-        except:
-            print('error: exception occurs!')
-            exit(0x1)
-        else:
-            exit(0x0)
+        result = srec_bin2rec_save_file(input_file_path,'',0x0000,32,2,0)
+        exit(0x00) if result==True else exit(0x01)
     else:
         print('no input file in script parameter!')
         exit(0x1)
