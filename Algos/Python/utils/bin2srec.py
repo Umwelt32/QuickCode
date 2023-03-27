@@ -2,6 +2,11 @@ import os,sys,math,numpy
 
 def srec_bin2rec_save_file(path,out_file='',addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
     result=True
+    output_file = str(out_file) if len(str(out_file))>0 else path.replace('.','_')+'.srec'
+    print('input file: '+str(path))
+    print('output file: '+str(output_file))
+    data = srec_bin2rec(path,addr_offset,line_size,addr_width,file_offset)
+    _srec_save_file(output_file,data)
     try:
         output_file = str(out_file) if len(str(out_file))>0 else path.replace('.','_')+'.srec'
         print('input file: '+str(path))
@@ -21,7 +26,8 @@ def srec_bin2rec(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0
     file_data   = numpy.fromfile(str(path),offset=file_offset,dtype=numpy.ubyte)
     line_size   = min(line_size,0xFF)
     line_size   = max(line_size,0x00)
-    file_chunks = numpy.split(file_data, line_size)
+    file_chunks = _srec_split2chunks(file_data,line_size)
+    print(file_chunks)
     file_chunks_count = len(file_chunks)
     srec_lines  = [str(_srec_get_srec_reg(addr_width,addr_offset+(idx*line_size),file_chunks[idx])) for idx in range(file_chunks_count)]
     srec_count  = _srec_gen_count_reg(file_chunks_count)
@@ -31,10 +37,22 @@ def srec_bin2rec(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0
     output_data.append(srec_count)
     output_data.append(srec_terminator)
     return output_data
-    
+
+def _srec_split2chunks(file_data,chunk_size):
+    data_len    = len(file_data)
+    output_data = numpy.array([0],dtype=numpy.uint8)
+    equal_size  = math.floor(math.floor(data_len/chunk_size)*chunk_size)
+    try:
+        output_data = numpy.split(file_data[0:equal_size], chunk_size)
+    except:
+        print('error in data handling!')
+    else:
+        print('data handling OK')
+    return output_data
+
 def _srec_save_file(path,data):
     f = open(str(path), "w")
-    for line in data: f.write(str(line))
+    for line in data: f.write(str(line)+'\n')
     f.close()
     
 def _srec_get_srec_reg(addr_width,base_addr,data):
@@ -64,9 +82,9 @@ def _srec_calc_checksum(data_array):
 def _srec_gen_count_reg(lines_count):
     header = ['S5','S5','S5','S6','S6','S6']
     lines_count_u32 = numpy.uint32(lines_count)
-    size_bytes = 0x02 if lines_count_u32>0xFFFF else 0x03
-    byte_count_au8  = numpy.array([numpy.uint8(size_bytes+0x01)])
-    lines_count_au8 = _srec_int2array(lines_count_u32,size_bytes)
+    addr_width = 0x02 if lines_count_u32>0xFFFF else 0x03
+    byte_count_au8  = numpy.array([numpy.uint8(addr_width+0x01)])
+    lines_count_au8 = _srec_int2array(lines_count_u32,addr_width)
     complement_data = numpy.append(byte_count_au8,lines_count_au8)
     checksum_u8     = _srec_calc_checksum(complement_data)
     checksum_au8    = numpy.array([checksum_u8],dtype=numpy.uint8)
@@ -109,7 +127,7 @@ def _srec_int2hex(v):
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
-        result = srec_bin2rec_save_file(input_file_path,'',0x0000,32,2,0)
+        result = srec_bin2rec_save_file(input_file_path,'',0x0000,0x8,0x02,0x00)
         exit(0x00) if result==True else exit(0x01)
     else:
         print('no input file in script parameter!')
