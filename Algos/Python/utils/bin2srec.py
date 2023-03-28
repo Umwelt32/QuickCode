@@ -35,9 +35,8 @@ def srec_bin2rec(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0
     line_size   = min(line_size,0xFF)
     line_size   = max(line_size,0x00)
     file_chunks = _srec_split2chunks(file_data,line_size)
-    file_chunks_count = len(file_chunks)
     srec_lines       = [str(_srec_get_srec_reg(addr_width,addr_offset+m_global_addr_offset,chunk)) for chunk in file_chunks]
-    srec_count       = _srec_gen_count_reg(file_chunks_count)
+    srec_count       = _srec_gen_count_reg(len(srec_lines))
     srec_terminator  = _srec_gen_terminator_reg(addr_width)
     output_data = srec_lines
     output_data.insert(0,header_data)
@@ -84,7 +83,7 @@ def _srec_calc_checksum(data_array):
 def _srec_gen_count_reg(lines_count):
     header = ['S5','S5','S5','S6','S6','S6']
     lines_count_u32 = numpy.uint32(lines_count)
-    addr_width = 0x02 if lines_count_u32>0xFFFF else 0x03
+    addr_width      = 0x03 if lines_count_u32>0xFFFF else 0x02
     byte_count_au8  = numpy.array([numpy.uint8(addr_width+0x01)])
     lines_count_au8 = _srec_int2array(lines_count_u32,addr_width)
     complement_data = numpy.append(byte_count_au8,lines_count_au8)
