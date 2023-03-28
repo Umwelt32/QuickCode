@@ -47,8 +47,7 @@ def srec_bin2rec(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0
 
 def _srec_split2chunks(file_data,chunk_size):
     data_len    = int(len(file_data))
-    equal_size  = int(math.floor(data_len/chunk_size))
-    output_data = numpy.array_split(file_data, equal_size)
+    output_data = [numpy.array(file_data[x:(x+chunk_size)],dtype=numpy.uint8) for x in range(0,data_len,chunk_size)]
     return output_data
 
 def _srec_save_file(path,data):
@@ -128,7 +127,7 @@ def _srec_int2hex(v):
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
-        result = srec_bin2rec_save_file(input_file_path,'',0x0000,0x1F,0x04,0x00)
+        result = srec_bin2rec_save_file(input_file_path,'',0x0000,0x20,0x04,0x00)
         exit(0x00) if result==True else exit(0x01)
     else:
         print('no input file in script parameter!')
