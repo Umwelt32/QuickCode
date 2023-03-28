@@ -12,11 +12,12 @@ import os,sys,math,numpy
 def bin2rec_save_file(path,out_dir='./bin_chunks',chunk_size=0x40000):
     result=True
     try:
+        input_file = path.replace('\\','/').split('/')[-1]
         print('input file: '+str(path))
         print('output directory: '+str(out_dir))
         file_data   = numpy.fromfile(str(path),dtype=numpy.ubyte)
         output_chunks = _bin2rec_split2chunks(file_data,chunk_size)
-        for idx in range(len(output_chunks)): _bin2rec_save_file(out_dir+'/'+str(idx)+'.BIN',output_chunks[idx])
+        _bin2rec_save_chunks(out_dir+'/'+input_file.replace('.','_')+'.txt',out_dir,output_chunks,chunk_size)
     except:
         print('error occures!')
         result=False
@@ -30,12 +31,24 @@ def _bin2rec_split2chunks(file_data,chunk_size):
     output_data = [numpy.array(file_data[x:(x+chunk_size)],dtype=numpy.uint8) for x in range(0,data_len,chunk_size)]
     return output_data
 
-def _bin2rec_save_file(path,data):
-    print('write: '+str(path))
+def _bin2rec_save_bin_file(path,data):
     f = open(str(path), "wb")
     f.write(data)
     f.close()
-    
+
+def _bin2rec_save_txt_file(path,data):
+    f = open(str(path), "w")
+    for line in data: f.write(line+'\n')
+    f.close()
+
+def _bin2rec_save_chunks(list_file_name,directory,chunks_data,chunk_size):
+    files2addr = []
+    for idx in range(len(chunks_data)): 
+        filename = str(idx)+'.BIN'
+        _bin2rec_save_bin_file(directory+'/'+filename,chunks_data[idx])
+        files2addr.append(str(hex(idx*chunk_size))+';'+filename)
+    _bin2rec_save_txt_file(list_file_name,files2addr)
+
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
