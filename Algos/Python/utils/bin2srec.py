@@ -1,14 +1,18 @@
+##################################################################
+## Author: https://github.com/Umwelt32/QuickCode
+## Copyright: 2023
+## bin2srec
+## References:
+############## https://en.wikipedia.org/wiki/SREC_(file_format)
+##############
+##################################################################
+
 import os,sys,math,numpy
 
 m_global_addr_offset = 0
 
 def srec_bin2rec_save_file(path,out_file='',addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
     result=True
-    output_file = str(out_file) if len(str(out_file))>0 else path.replace('.','_')+'.srec'
-    print('input file: '+str(path))
-    print('output file: '+str(output_file))
-    data = srec_bin2rec(path,addr_offset,line_size,addr_width,file_offset)
-    _srec_save_file(output_file,data)
     try:
         output_file = str(out_file) if len(str(out_file))>0 else path.replace('.','_')+'.srec'
         print('input file: '+str(path))
@@ -124,7 +128,7 @@ def _srec_int2hex(v):
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
-        result = srec_bin2rec_save_file(input_file_path,'',0x0000,0x8,0x02,0x00)
+        result = srec_bin2rec_save_file(input_file_path,'',0x0000,0x1F,0x04,0x00)
         exit(0x00) if result==True else exit(0x01)
     else:
         print('no input file in script parameter!')
