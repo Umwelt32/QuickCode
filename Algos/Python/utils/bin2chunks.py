@@ -47,6 +47,7 @@ def _bin2rec_save_chunks(list_file_name,directory,chunks_data,chunk_size):
         filename = str(idx)+'.BIN'
         _bin2rec_save_bin_file(directory+'/'+filename,chunks_data[idx])
         files2addr.append(str(hex(idx*chunk_size))+';'+filename)
+    files2addr.insert(0,str(hex(len(files2addr))))
     _bin2rec_save_txt_file(list_file_name,files2addr)
 
 if __name__ == "__main__":
