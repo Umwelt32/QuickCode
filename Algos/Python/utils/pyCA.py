@@ -18,7 +18,7 @@ def ca_random_int(v1,v2):
     return int(random.randint(v1,v2))
 
 def ca_random_01(r):
-    return 1 if (ca_random_int(0,100)>int(r*100)) else 0
+    return 1 if (ca_random_int(0,100)<=int(r*100)) else 0
 
 def ca_init(seed,r,w,h):
     global grid
@@ -78,7 +78,7 @@ def ca_save_grid_im(filename):
     cv2.imwrite(filename, img)
 
 if __name__ == "__main__":
-    ca_init(128,0.25,256,256)
+    ca_init(128,0.75,256,256)
     ca_iterate(16,16,2)
     ca_save_grid_im('out.bmp')
     exit(0x1)
