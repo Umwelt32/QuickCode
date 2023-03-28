@@ -1,5 +1,7 @@
 import os,sys,math,numpy
 
+m_global_addr_offset = 0
+
 def srec_bin2rec_save_file(path,out_file='',addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
     result=True
     output_file = str(out_file) if len(str(out_file))>0 else path.replace('.','_')+'.srec'
@@ -22,32 +24,27 @@ def srec_bin2rec_save_file(path,out_file='',addr_offset=0x0000,line_size=32,addr
     return result
 
 def srec_bin2rec(path,addr_offset=0x0000,line_size=32,addr_width=2,file_offset=0):
+    global m_global_addr_offset
+    m_global_addr_offset = 0
     header_data = 'S00F000068656C6C6F202020202000003C'
     file_data   = numpy.fromfile(str(path),offset=file_offset,dtype=numpy.ubyte)
     line_size   = min(line_size,0xFF)
     line_size   = max(line_size,0x00)
     file_chunks = _srec_split2chunks(file_data,line_size)
-    print(file_chunks)
     file_chunks_count = len(file_chunks)
-    srec_lines  = [str(_srec_get_srec_reg(addr_width,addr_offset+(idx*line_size),file_chunks[idx])) for idx in range(file_chunks_count)]
-    srec_count  = _srec_gen_count_reg(file_chunks_count)
+    srec_lines       = [str(_srec_get_srec_reg(addr_width,addr_offset+m_global_addr_offset,chunk)) for chunk in file_chunks]
+    srec_count       = _srec_gen_count_reg(file_chunks_count)
     srec_terminator  = _srec_gen_terminator_reg(addr_width)
-    output_data      = [header_data]
-    for line in srec_lines: output_data.append(line)
+    output_data = srec_lines
+    output_data.insert(0,header_data)
     output_data.append(srec_count)
     output_data.append(srec_terminator)
     return output_data
 
 def _srec_split2chunks(file_data,chunk_size):
-    data_len    = len(file_data)
-    output_data = numpy.array([0],dtype=numpy.uint8)
-    equal_size  = math.floor(math.floor(data_len/chunk_size)*chunk_size)
-    try:
-        output_data = numpy.split(file_data[0:equal_size], chunk_size)
-    except:
-        print('error in data handling!')
-    else:
-        print('data handling OK')
+    data_len    = int(len(file_data))
+    equal_size  = int(math.floor(data_len/chunk_size))
+    output_data = numpy.array_split(file_data, equal_size)
     return output_data
 
 def _srec_save_file(path,data):
@@ -56,7 +53,9 @@ def _srec_save_file(path,data):
     f.close()
     
 def _srec_get_srec_reg(addr_width,base_addr,data):
+    global m_global_addr_offset
     byte_count      = len(data)
+    m_global_addr_offset = m_global_addr_offset+byte_count
     addr_width      = min(addr_width,0x04)
     addr_width      = max(addr_width,0x02)
     header          = ['XX','XX','S1','S2','S3','XX','XX']
@@ -93,12 +92,10 @@ def _srec_gen_count_reg(lines_count):
     return srec_complete
 
 def _srec_gen_terminator_reg(addr_width):
-    header = ['S9','S9','S9','S8','S7','S7']
-    addr_width  = min(addr_width,0x04)
-    addr_width  = max(addr_width,0x02)
-    addr_width_u32 = numpy.uint32(addr_width)
-    terminator = '030000FC'
-    srec_complete = str(header[addr_width])+str(terminator)
+    termination_str = ['','','S9030000FC','S804000000FB','S70500000000FA','']
+    addr_width    = min(addr_width,0x04)
+    addr_width    = max(addr_width,0x02)
+    srec_complete = str(termination_str[addr_width])
     return srec_complete
 
 def _srec_array2string(data):
