@@ -16,7 +16,7 @@ def bin2rec_save_file(path,out_dir='./bin_chunks',chunk_size=0x40000):
         print('output directory: '+str(out_dir))
         file_data   = numpy.fromfile(str(path),dtype=numpy.ubyte)
         output_chunks = _bin2rec_split2chunks(file_data,chunk_size)
-        for idx in range(len(output_chunks)): _bin2rec_save_file(out_dir+'/'+str(idx)+'_CHUNK.BIN',output_chunks[idx])
+        for idx in range(len(output_chunks)): _bin2rec_save_file(out_dir+'/'+str(idx)+'.BIN',output_chunks[idx])
     except:
         print('error occures!')
         result=False
