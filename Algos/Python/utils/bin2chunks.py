@@ -9,15 +9,15 @@
 
 import os,sys,math,numpy
 
-def bin2rec_save_file(path,out_dir='./bin_chunks',chunk_size=0x40000):
+def bin2rec_save_file(path,out_dir='./bin_chunks',list_out_file='',chunk_size=0x40000):
     result=True
     try:
-        input_file = path.replace('\\','/').split('/')[-1]
         print('input file: '+str(path))
         print('output directory: '+str(out_dir))
-        file_data   = numpy.fromfile(str(path),dtype=numpy.ubyte)
+        list_file     = list_out_file if len(list_out_file)>0 else path.replace('\\','/').split('/')[-1].replace('.','_')+'.txt'
+        file_data     = numpy.fromfile(str(path),dtype=numpy.ubyte)
         output_chunks = _bin2rec_split2chunks(file_data,chunk_size)
-        _bin2rec_save_chunks(out_dir+'/'+input_file.replace('.','_')+'.txt',out_dir,output_chunks,chunk_size)
+        _bin2rec_save_chunks(out_dir+'/'+list_file,out_dir,output_chunks,chunk_size)
     except:
         print('error occures!')
         result=False
@@ -53,7 +53,7 @@ def _bin2rec_save_chunks(list_file_name,directory,chunks_data,chunk_size):
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
         input_file_path = str(sys.argv[1])
-        result = bin2rec_save_file(input_file_path,'./bin_chunks',0x40000)
+        result = bin2rec_save_file(input_file_path,'','./bin_chunks',0x40000)
         exit(0x00) if result==True else exit(0x01)
     else:
         print('no input file in script parameter!')
