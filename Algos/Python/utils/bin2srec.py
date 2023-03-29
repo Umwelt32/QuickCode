@@ -125,7 +125,7 @@ def _srec_int2hex(v):
     
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
-        output_file = '' if len(sys.argv) < 2 else str(sys.argv[2])
+        output_file = '' if len(sys.argv) < 3 else str(sys.argv[2])
         result = srec_bin2rec_save_file(str(sys.argv[1]),str(output_file),0x0000,0x20,0x04,0x00)
         exit(0x00) if result==True else exit(0x01)
     else:
