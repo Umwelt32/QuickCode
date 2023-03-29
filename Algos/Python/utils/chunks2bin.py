@@ -11,16 +11,16 @@ import os,sys,math,numpy
 
 def chunks2bin_mergeChunks2Bin(txt_file,chunks_dir,output_file):
     txt_file  = open(txt_file, "r")
-    txt_file_data = [line for line in txt_file]
+    txt_file_data = [line.replace('\n','') for line in txt_file]
     txt_file.close()
-    chunk_size    = int(txt_file_data[0].replace('\n',''),base=16)
-    txt_file_size = int(txt_file_data[1].replace('\n',''),base=16)
-    chunk_count   = int(txt_file_data[2].replace('\n',''),base=16)
+    chunk_size    = int(txt_file_data[0],base=16)
+    txt_file_size = int(txt_file_data[1],base=16)
+    chunk_count   = int(txt_file_data[2],base=16)
     data_poll     = numpy.zeros(txt_file_size,dtype=numpy.ubyte)
     ########################################
     for node in txt_file_data[3:]:
         start_addr=int(node.split(';')[0],base=16)
-        file_name =str(node.split(';')[1]).replace('\n','')
+        file_name =str(node.split(';')[1])
         chunk_data=numpy.fromfile(str(chunks_dir+'/'+file_name),dtype=numpy.ubyte)
         data_poll[start_addr:(start_addr+chunk_size)]=chunk_data
     ########################################
