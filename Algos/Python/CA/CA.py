@@ -11,6 +11,8 @@ import os,sys,math,numpy,random,cv2
 
 grid = None
 
+p_params = {"seed": 128,"r": 0.75,"w": 256,"h": 256,"i": 16,"t": 16,"m": 2,"file": 'out.bmp'}
+
 def ca_set_random_seed(val):
     random.seed(val)
 
@@ -77,8 +79,14 @@ def ca_save_grid_im(filename):
     img[:,:]=(grid[:,:]['type']*255)/2
     cv2.imwrite(filename, img)
 
+def ca_parse_params(arg):
+    for a in arg[1:]:
+        ap = a.split('=')
+        p_params[ap[0]]=ap[1]
+        
 if __name__ == "__main__":
-    ca_init(128,0.75,256,256)
-    ca_iterate(16,16,2)
-    ca_save_grid_im('out.bmp')
+    ca_parse_params(sys.argv)
+    ca_init(int(p_params['seed']),float(p_params['r']),int(p_params['w']),int(p_params['h']))
+    ca_iterate(int(p_params['i']),int(p_params['t']),int(p_params['m']))
+    ca_save_grid_im(p_params['file'])
     exit(0x1)
