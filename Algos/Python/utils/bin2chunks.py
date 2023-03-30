@@ -17,11 +17,11 @@ def bin2rec_save_file(path,out_dir='./bin_chunks',list_out_file='',chunk_size=0x
     try:
         print('input file: '+str(path))
         print('output directory: '+str(out_dir))
-        list_file     = list_out_file if len(list_out_file)>0 else path.replace('\\','/').split('/')[-1].replace('.','_')+'.txt'
+        list_file     = list_out_file if len(list_out_file)>0 else out_dir+'/'+path.replace('\\','/').split('/')[-1].replace('.','_')+'.txt'
         file_data     = numpy.fromfile(str(path),dtype=numpy.ubyte)
         m_file_size   = len(file_data)
         output_chunks = _bin2rec_split2chunks(file_data,chunk_size)
-        _bin2rec_save_chunks(out_dir+'/'+list_file,out_dir,output_chunks,chunk_size)
+        _bin2rec_save_chunks(list_file,out_dir,output_chunks,chunk_size)
     except:
         print('error occures!')
         result=False
