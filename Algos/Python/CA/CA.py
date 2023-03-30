@@ -75,8 +75,12 @@ def ca_iterate(n,t,m):
 
 def ca_save_grid_im(filename):
     global grid
+    colors = [0,128,255]
     img = numpy.zeros(shape=(grid.shape[0],grid.shape[1]), dtype=numpy.uint8)
-    img[:,:]=(grid[:,:]['type']*255)/2
+    img[:,:]=grid[:,:]['type']
+    img[img==0]=colors[0]
+    img[img==1]=colors[1]
+    img[img==2]=colors[2]
     cv2.imwrite(filename, img)
 
 def ca_parse_params(arg):
