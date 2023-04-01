@@ -79,10 +79,12 @@ def ca_subdivide():
             new_grid[(2*x)+1,(2*y)+1]=grid[x,y]
     grid=new_grid
 
-def ca_iterate(n,t,m):
+def ca_iterate(n,t,m,sub=False,n1=0):
     global grid
-    for x in range(n):
-        ca_iterate_once(t,m)
+    for x in range(n):ca_iterate_once(t,m)
+    if sub==True:
+        ca_subdivide()
+        for x in range(n1):ca_iterate_once(t,m)
     ca_recal_walls()
 
 def ca_save_grid_im(filename):
@@ -103,8 +105,6 @@ def ca_parse_params(arg):
 if __name__ == "__main__":
     ca_parse_params(sys.argv)
     ca_init(int(p_params['seed']),float(p_params['r']),int(p_params['w']),int(p_params['h']))
-    ca_iterate(int(p_params['i']),int(p_params['t']),int(p_params['m']))
-    ca_subdivide()
-    ca_iterate(int(p_params['i']),int(p_params['t']),int(p_params['m']))
+    ca_iterate(int(p_params['i']),int(p_params['t']),int(p_params['m']),True,2)
     ca_save_grid_im(p_params['file'])
     exit(0x1)
