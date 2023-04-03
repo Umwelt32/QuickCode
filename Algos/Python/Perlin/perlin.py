@@ -13,12 +13,12 @@ import perlin_noise
 def _float2byte(array):
     img_int       = numpy.zeros(shape=(array.shape[0],array.shape[1]), dtype=numpy.short)
     img_byte      = numpy.zeros(shape=(array.shape[0],array.shape[1]), dtype=numpy.ubyte)
-    img_int[:,:]  = array[:,:]*255
+    img_int[:,:]  = array[:,:]*2048
     _max          = img_int.max()
     _min          = img_int.min()
-    img_byte[:,:] = ((img_int[:,:]+_min)/_max)*255
+    img_byte[:,:] = ((img_int[:,:]-_min)/_max)*255
     return img_byte
-        
+
 def _fdiv(a,b):
     return float(float(a)/float(b))
 
@@ -39,7 +39,5 @@ def perlin_noise_gen(w,h,_seed,_octaves,lac):
     
 
 if __name__ == "__main__":
-    img = perlin_noise_gen(512,512,128,4,8)
+    img = perlin_noise_gen(512,512,128,4,4)
     cv2.imwrite('noise.bmp', img)
-    print('stub')
-
