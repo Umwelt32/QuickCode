@@ -39,4 +39,3 @@ def perlin_noise_gen(w,h,_seed,_octaves,lac):
 if __name__ == "__main__":
     img = perlin_noise_gen(512,512,128,8,3)
     cv2.imwrite('noise.bmp', img)
-
