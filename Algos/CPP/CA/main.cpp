@@ -9,8 +9,8 @@ static U32 m_seed = 128u;
 static U32 m_w = 1024u;
 static U32 m_h = 1024u;
 static U32 m_n = 16u;
-static U32 m_m = 3u;
-static F32 m_t = 0.64f;
+static U32 m_m = 5u;
+static F32 m_t = 0.68f;
 static F32 m_r = 0.75f;
 std::string m_output_file="bitmap_out.bmp";
 
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     parse_params(argc,argv);
     ca_pcg node;
     node.init(m_w,m_h);
-    node.generate_f(m_seed,m_r,m_n,m_t,m_m);
+    node.generate_sub_f(m_seed,m_r,m_n,m_t,m_m,2,2);
     node.saveToBmp(m_output_file.c_str());
     return 0;
 }

@@ -61,8 +61,6 @@ void ca_pcg::random_set(const F32 &r)
 
 void ca_pcg::iterate_once(const S16 &T,const S16 &M)
 {
-    U32 w,h;
-    m_cells.getSize(w,h);
     recalculate_all_nv_value(M);
     recalculate_rocks(T);
 }
@@ -152,11 +150,15 @@ void ca_pcg::recalculate_walls()
     for (S32 i=0;i<w;++i)for (S32 j=0;j<h;++j)
     {
         ca_node_t *current=m_cells.getPtr(i,j);
-        if (current->type==CA_CELL_TYPE_ROCK)
+        if ((current->type==CA_CELL_TYPE_ROCK)||(current->type==CA_CELL_TYPE_WALL))
         {
             if(current->floor_value>0)
             {
                 current->type=CA_CELL_TYPE_WALL;
+            }
+            else
+            {
+                current->type=CA_CELL_TYPE_ROCK;
             }
         }
     }
@@ -183,15 +185,68 @@ void ca_pcg::generate(const U16 &seed,const F32 &r,const U16 &N,const S16 &T,con
 
 void ca_pcg::generate_f(const U16 &seed,const F32 &r,const U16 &N,const F32 &M_F,const S16 &M)
 {
-    S16 T_P1=((2*M)+1);
-    S16 T_P2=((T_P1*T_P1)-1);
-    F32 T_F=T_P2*M_F;
-    S16 T  = std::ceil(T_F);
-    if (T_P2<T)T=T_P2;
-    this->generate(seed,r,N,T,M);
+    this->generate(seed,r,N,FT_T(M,M_F),M);
+}
+
+void ca_pcg::generate_sub(const U16 &seed,const F32 &r,const U16 &N,const S16 &T,const S16 &M,const U8 &sub,const U8 &n1)
+{
+    this->setSeed(seed);
+    this->reset(r);
+    this->iterate_n_epoch(N,T,M);
+    for (U8 i=0;i<sub;++i)
+    {
+        subdivide();
+        this->iterate_n_epoch(n1,T,M);
+    }
+    this->recalculate_walls();
+}
+
+void ca_pcg::generate_sub_f(const U16 &seed,const F32 &r,const U16 &N,const F32 &M_F,const S16 &M,const U8 &sub,const U8 &n1)
+{
+    this->generate_sub(seed,r,N,FT_T(M,M_F),M,sub,n1);
 }
 
 void ca_pcg::setSeed(const U16 &seed)
 {
     srand(seed);
+}
+
+void ca_pcg::subdivide(void)
+{
+    U32 w,h;
+    array2d<ca_node_t> cell_copy;
+    m_cells.getSize(w,h);
+    cell_copy.copy(m_cells);
+    m_cells.init(2*w,2*h);
+    for (U32 i=0;i<w;++i)
+    {
+        for (U32 j=0;j<h;++j)
+        {
+            m_cells.set((2*i)+0,(2*j)+0,cell_copy.getPtr(i+0,j+0));
+            m_cells.set((2*i)+1,(2*j)+0,cell_copy.getPtr(i+0,j+0));
+            m_cells.set((2*i)+0,(2*j)+1,cell_copy.getPtr(i+0,j+0));
+            m_cells.set((2*i)+1,(2*j)+1,cell_copy.getPtr(i+0,j+0));
+        }
+    }
+    cell_copy.clear();
+    this->resetXY();
+}
+
+S16 ca_pcg::FT_T(const S16 &M, const F32 &M_F)
+{
+    S16 T_P1=((2*M)+1);
+    S16 T_P2=((T_P1*T_P1)-1);
+    F32 T_F=T_P2*M_F;
+    S16 T  = std::ceil(T_F);
+    if (T_P2<T)T=T_P2;
+    return T;
+}
+
+void ca_pcg::resetXY(void)
+{
+    U32 w,h;
+    m_cells.getSize(w,h);
+    for (U32 i=0;i<w;++i){for (U32 j=0;j<h;++j){
+        m_cells.getPtr(i,j)->m_x=i;m_cells.getPtr(i,j)->m_y=j;
+    }}
 }
