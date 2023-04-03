@@ -28,8 +28,6 @@ void ca_pcg::init(const U16 &w,const U16 &h)
     for (S32 i=0;i<w;++i)
     for (S32 j=0;j<h;++j)
     {
-        m_cells.getPtr(i,j)->m_x=i;
-        m_cells.getPtr(i,j)->m_y=j;
         m_cells.getPtr(i,j)->type=CA_CELL_TYPE_FLOOR;
         m_cells.getPtr(i,j)->neightborhood_value=0;
         m_cells.getPtr(i,j)->floor_value=0;
@@ -40,11 +38,7 @@ void ca_pcg::recalculate_all_nv_value(const S16 &M)
 {
     U32 w,h;
     m_cells.getSize(w,h);
-    for (S32 i=0;i<w;++i)
-    for (S32 j=0;j<h;++j)
-    {
-        recalculate_nv_for_node(m_cells.getPtr(i,j),M);
-    }
+    for (S32 i=0;i<w;++i){for (S32 j=0;j<h;++j){recalculate_nv_for_node(i,j,M);}}
 }
 
 void ca_pcg::random_set(const F32 &r)
@@ -105,13 +99,15 @@ void ca_pcg::saveToFile(const std::string &path)
     file.close();
 }
 
-void ca_pcg::recalculate_nv_for_node(ca_node_t *node,const S16 &M)
+void ca_pcg::recalculate_nv_for_node(const S32 &x,const S32 &y,const S16 &M)
 {
     U16 nv=0;
     U16 floors=0;
+    ca_node_t *node;
+    node=m_cells.getPtr(x,y);
     if (node==nullptr)return;
     if (M<=0)return;
-    point2d_t S(node->m_x,node->m_y);
+    point2d_t S(x,y);
     point2d_t A(S.x-M,S.y-M);/*AABB*/
     point2d_t B(S.x+M+1,S.y+M+1);
     for (S16 i=A.x;i<B.x;++i)
@@ -229,7 +225,6 @@ void ca_pcg::subdivide(void)
         }
     }
     cell_copy.clear();
-    this->resetXY();
 }
 
 S16 ca_pcg::FT_T(const S16 &M, const F32 &M_F)
@@ -242,11 +237,3 @@ S16 ca_pcg::FT_T(const S16 &M, const F32 &M_F)
     return T;
 }
 
-void ca_pcg::resetXY(void)
-{
-    U32 w,h;
-    m_cells.getSize(w,h);
-    for (U32 i=0;i<w;++i){for (U32 j=0;j<h;++j){
-        m_cells.getPtr(i,j)->m_x=i;m_cells.getPtr(i,j)->m_y=j;
-    }}
-}

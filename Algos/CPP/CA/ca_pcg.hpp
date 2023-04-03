@@ -5,8 +5,6 @@
 
 typedef struct
 {
-    S32 m_x;
-    S32 m_y;
     U8 type;
     U16 neightborhood_value;
     U16 floor_value;
@@ -26,7 +24,6 @@ class ca_pcg
         void saveToFile(const std::string &path);
         void saveToBmp(const std::string &path);
     private:
-        void resetXY(void);
         S16 FT_T(const S16 &M, const F32 &M_F);
         void subdivide(void);
         void setSeed(const U16 &seed);
@@ -34,7 +31,7 @@ class ca_pcg
         void reset(const F32 &r);
         void recalculate_walls(void);
         void recalculate_rocks(const U16 &T);
-        void recalculate_nv_for_node(ca_node_t *node,const S16 &M);
+        void recalculate_nv_for_node(const S32 &x,const S32 &y,const S16 &M);
         void random_set(const F32 &r);
         void recalculate_all_nv_value(const S16 &M);
         void iterate_once(const S16 &T,const S16 &M);
