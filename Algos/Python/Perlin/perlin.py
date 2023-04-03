@@ -19,7 +19,8 @@ def _float2byte(array):
     img_int[:,:]   = array[:,:]*2048
     _max           = img_int.max()
     _min           = img_int.min()
-    img_byte[:,:]  = ((img_int[:,:]-_min)/(_max-_min))*255
+    _base          = (_max-_min)
+    img_byte[:,:]  = ((img_int[:,:]-_min)/(_base))*255
     return img_byte
 
 def perlin_noise_gen(w,h,_seed,_octaves,lac):
