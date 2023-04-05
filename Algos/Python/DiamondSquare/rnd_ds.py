@@ -26,12 +26,20 @@ def _get_rnd_distribution_from_img(path):
 def _set_random_seed(seed):
     numpy.random.seed(int(seed))
 
+
+def _get_random_uniform1(range):
+    return float(((numpy.random.random()*2.0)-1.0)*range)
+
+def _get_random_uniform2(range):
+    global m_rnd_distribution
+    return float(numpy.random.choice(m_rnd_distribution[0], p=m_rnd_distribution[1])*range)
+
 def _get_random_uniform(range):
     global m_rnd_distribution
-    if m_rnd_distribution:
-        return float(numpy.random.choice(m_rnd_distribution[0], p=m_rnd_distribution[1])*range)
+    if m_rnd_distribution!=None:
+        return (_get_random_uniform1(1.0-range)+_get_random_uniform2(range))*range
     else:
-        return float(((numpy.random.random()*2.0)-1.0)*range)
+        return _get_random_uniform1(range)
 
 def _set_point_value(pos,v):
     global m_params
@@ -121,5 +129,5 @@ def DS_run_bmp(input,seed,n,h,file):
     DS_run(seed,n,h,file)
 
 if __name__ == "__main__":
-    DS_run_bmp('N44W094_hgt.bmp',128,10,0.5,'out.bmp')
+    DS_run_bmp('input.bmp',128,10,0.7,'out.bmp')
     exit(0x00)
