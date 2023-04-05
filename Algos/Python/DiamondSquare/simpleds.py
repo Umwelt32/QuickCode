@@ -77,7 +77,6 @@ def _do_iteration():
                         _calculate_mid(i,j+half,half,ratio,         False)
                         _calculate_mid(i+(2*half),j+half,half,ratio,False)
                         _calculate_mid(i+half,j+(2*half),half,ratio,False)
-                
 
 def _float2byte(array):
     img_int        = numpy.zeros(shape=(array.shape[0],array.shape[1]), dtype=numpy.short)
