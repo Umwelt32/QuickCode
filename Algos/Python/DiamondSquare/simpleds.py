@@ -6,40 +6,15 @@
 ############## https://doi.org/10.1145/358523.358553
 ##################################################
 
-import os,sys,math,numpy,cv2
+import os,sys,math,numpy,random,cv2
 
 m_params = {"data": None,"size": 0,"h_factor": 0,"current_half": 0,"current_size": 0,"current_ratio": 0}
-m_rnd_distribution = None
 
-def _get_rnd_distribution_from_img(path):
-    img = cv2.imread(path, 0)
-    img = cv2.normalize(img, img, 0, 255, cv2.NORM_MINMAX)
-    img_array    = numpy.asarray(img)
-    img_array_1D = img_array.reshape((img_array.shape[0]*img_array.shape[1]))
-    histogram    = numpy.histogram(img_array_1D,density=True, bins=[x for x in range(0,256)])
-    h_p_f        = histogram[0]
-    h_p_f        = numpy.append(h_p_f, 0)
-    h_values     = histogram[1]
-    h_values_f   = numpy.interp(h_values, (h_values.min(), h_values.max()), (-1, 1)).round(8)
-    return [h_values_f,h_p_f]
-    
 def _set_random_seed(seed):
-    numpy.random.seed(int(seed))
-
-
-def _get_random_uniform1(range):
-    return float(((numpy.random.random()*2.0)-1.0)*range)
-
-def _get_random_uniform2(range):
-    global m_rnd_distribution
-    return float(numpy.random.choice(m_rnd_distribution[0], p=m_rnd_distribution[1])*range)
+    random.seed(int(seed))
 
 def _get_random_uniform(range):
-    global m_rnd_distribution
-    if m_rnd_distribution!=None:
-        return (_get_random_uniform1(1.0-range)+_get_random_uniform2(range))*range
-    else:
-        return _get_random_uniform1(range)
+    return float(((random.random()*2.0)-1.0)*range)
 
 def _set_point_value(pos,v):
     global m_params
@@ -123,11 +98,6 @@ def DS_run(seed,n,h,file):
     _do_iteration()
     _save_img(file)
 
-def DS_run_bmp(input,seed,n,h,file):
-    global m_rnd_distribution
-    m_rnd_distribution = _get_rnd_distribution_from_img(input)
-    DS_run(seed,n,h,file)
-
 if __name__ == "__main__":
-    DS_run_bmp('input.bmp',128,10,0.7,'out.bmp')
+    DS_run(128,10,0.5,'out.bmp')
     exit(0x00)
