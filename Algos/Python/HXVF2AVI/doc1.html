@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0032)https://spitzner.org/kkmoon.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  
+  <meta name="keywords" content=".264 mpeg mp4 kkmoon ip camera">
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="./Cheap Chinese camera garbled .264 files_files/style.css" type="text/css" media="screen, projection">
+  <link rel="stylesheet" href="./Cheap Chinese camera garbled .264 files_files/normalize.css" type="text/css" media="screen, projection">
+  
+  <meta name="google-site-verification" content="aoCJEPKQ-OyXE7VdribWqqVeG7257YqQj0EWft5Gzw8">
+  
+  <link rel="stylesheet" type="text/css" href="./Cheap Chinese camera garbled .264 files_files/prettify.css">
+  
+<style>
+.prettyprint {
+    background: #FFF;
+}
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9
+{
+    color: #555;
+    list-style-type: decimal;
+}
+</style>
+
+<title>Cheap Chinese camera garbled .264 files</title>
+  
+</head>
+<body style="background-color: rgb(255, 255, 255); font-family: Arial,sans-serif;">
+<script type="text/javascript">
+if(ie < 9)
+	{
+
+	document.write('<div style="background: #fff; color: red; float: center">');
+	document.write('<center>You are using Internet Explorer Version '+ie+' so this Website will look ugly to you.<br>');
+	document.write('Choose Life, <a href="http://www.browserchoice.eu/BrowserChoice/browserchoice_en.htm">');
+	document.write('choose a Browser.</a> </center>');
+	document.write('</div');
+
+	}
+</script>
+<br>
+
+<br>
+
+<div id="container">
+<div id="content"><br>
+  <div style="float: right;">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="8HRWHTC2W5D2Y">
+<input type="image" src="./Cheap Chinese camera garbled .264 files_files/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="./Cheap Chinese camera garbled .264 files_files/pixel.gif" width="1" height="1" nlkx3u307="">
+</form>
+</div>
+  <h2>Make camera footage usable in normal players like VLC <sup><a href="https://spitzner.org/kkmoon.html#fn1" id="ref1">1</a></sup>,MPlayer et al.</h2>
+<br>(Please note that this tool just 'extracts' audio/video from the camfile, therefore whatever is produced corresponds to camera settings)<br><br>
+      <div style="font-size: 16px; margin-left: 60px; margin-right: 60px; text-align: left;">(verbal illustrations for entertainmet purposes in case of  TL;DR)<br>I
+recently bought one of those cheap Chinese surveillance cameras w/ pan
+and tilt, IR cut an motion detection.<br>
+<br>
+</div>
+<img style="-moz-border-radius-topleft: 20px; -moz-border-radius-topright: 20px; -moz-border-radius-bottomright: 20px; -moz-border-radius-bottomleft: 20px;" src="./Cheap Chinese camera garbled .264 files_files/camera.jpg" width="150"><br>
+<br>
+<div style="font-size: 16px; margin-left: 60px; margin-right: 60px; text-align: left;">
+This one's called "KKMoon Model: 810", it works as expected,
+configuration is quiete easy you just get the app enter your WiFi
+password and your phone chirps that to the microphone of the camera.
+After that the app will find the camera on the lan identified by some
+obscure CloudSee Id.<br>
+You can configure the rest of the settings via the app or the web
+interface (like changing the login from admin/admin to something more
+reasonable).<br>
+Motion detection works surprisingly well ( once you've fitted a SD-Card
+it'll even record :-) ).<br>
+There's one menu entry in the settings which is a bit confusing as you
+can choose "Save to ftp-server". This should really read "Copy to
+ftp-server", since without a SD-Card nothings is recorded in the first
+place.<br>
+So I stuck in a Memory card and configured for ftp ( no sense in it
+just having the footage onthe card if the whole camera is gone ).<br>
+After some "motion" I had a bunch of *.264 files on my server. I tried
+to play them with everything I had at hand, even transferred a few
+files to my Windows machine, but to no avail.<br>
+Not one of those players could handle these files :-(<br>
+<br>
+Mediainfo just prints the filesize and MP4Box says it can't find a MP4
+header.<br>
+<br>
+This really sucks so it's time to have a look  at what's happening here :-).<br>
+(Let alone the case where you'd need to hand over the footage to someone i.e. as evidence)
+<br>
+Looking at the files with a hex editor puts some 'magic' in sight:<br>
+<br>
+<code>
+00000000 48 58 56 53 | 00 05 00 00 | D0 02 00 00 | 00 00 0000&nbsp; HXVS....Ð.......<br>
+00000010 48 58 56 46 | 17 00 00 00 | FC BD 59 0A | 01 00 00 00&nbsp;HXVF....ü½Y.....<br>
+00000020 00 00 00 01 | 47 4D 00 1F | 99 A0 14 01 | 6E 84 00 00&nbsp;....GM...&nbsp;..n...<br>
+00000030 0F A0 00 02 | 71 02 10 48 | 58 56 46 08 | 00 00 00 FC&nbsp;.&nbsp;..q..HXVF....ü<br>
+00000040 BD 59 0A 01 | 00 00 00 00 | 00 00 01 48 | EE 3C 80 48&nbsp;½Y.........Hî&lt;.H<br>
+00000050 58 56 46 2C | 48 00 00 FC | BD 59 0A 01 | 00 00 00 00&nbsp;XVF,H..ü½Y......<br>
+</code><br>
+They all start with a bunch of 'garbage' like 'HXVS' and 'HXVF', the third line is part of the mpdeprecatedeg-header.<br>
+Digging further there a two more 'magic' strings to be found: HXAF and HXFI.<br>
+<br>
+I don't know what HXVS is for but it adds to the assumption that each
+of these 'magic' strings are composed o 16 (0x10) bytes.<br>
+(I just throw away the HXVS, it appears only once at the start of that
+file)<br>
+After HXVF though there's data we want, these are exactly 0x17 bytes
+until the next HXVF, hey, what does it say in the long<br>
+following the first HXVF ? <br>
+Yes, 0x0017 ,&nbsp; Second ? -&gt;&nbsp; 0x008, Third ? -&gt; 0x482c,
+heureka :-)<br>
+<br>
+To make a long story short HXVF and HXAF are followed by a value indicating the size of the data following.<br>
+Where HXVF is the data we want HXAF is followed by four bytes we can throw away {0x00001,0x5000} and audio data.<br>
+HXFI seems to be some sort of file index we can safely ignore and end copying.<br>
+<br>
+Hammering the old brain-case a bit produced the following C code:<br>
+<br>
+(If you have other garbled .264 files, feel free to contact me @ rasp AT spitzner.org)<br>
+  (Thanks to Alp Günes for the tip that HXAF could be the audio :-) )<br><br>
+      <h3>
+    At least two people pointed out to me  that the resulting mp4 is not rendering correctly, this is due
+    to some cameras not having any idea about the frame rate they're recording at, or the lack of being able to write a proper file-header (SPS info), </h3>
+      [&lt;rant&gt;this is getting political: all of these SOC's I've come across are perfectly able to produce mp4Video with mp3sound if only the licenses were paid for; instead, they all cook up their own bowl of rice... &lt;/rant&gt;]
+      <h3> so if you just see lots of mplayer errors and/or
+    vertical stripes in the display window,or it plays at wrong speed try: <br>
+	  <code>$&gt; mplayer -fps &lt;whateverframerateyourcamuses&gt; whaterveryourfileiscalled.mp4 </code><br>
+	    or create an envelope:<br><code>mkvmerge -o bla.mkv --defaultduration0:&lt;yourframerate&gt;fps wrongspeedfromconvert.mp4</code><br>
+
+      <!--Here's a <a href="convert.exe">convert.exe</a>-->
+  original writeup follows - use the second version below... <br>
+<hr>If you don't want to bother compiling the the source and/or using mkvmerge  Tony Mobily has built a self contained(no deps) application using convert2.c and mkvmerge
+which does the conversion in one go, find<a href="https://mercmobily.github.io/broken264fixer/"> his broken264fixer here</a>. 
+<br>
+<hr>
+here's another approach done by Ivan Ustûžanin which will produce an .AVI done in PHP, so only php is required:-)<br>
+<a href="https://spitzner.org/dot264toavi.php.gz"> dot264toavi.php.gz </a> gzipped for obvious resons :-)<br>
+<hr>
+  </h3>
+<pre class="prettyprint prettyprinted" style=""><code class="language-c"><br><br><span class="com">/*
+ * convert weird *.264 file to mp4 and wav
+ * -raspo666 2018
+ */</span><span class="pln">
+
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;stdio.h&gt;</span><span class="pln">
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;stdlib.h&gt;</span><span class="pln">
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;strings.h&gt;</span><span class="pln">
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;string.h&gt;</span><span class="pln">
+
+
+</span><span class="com">#ifndef</span><span class="pln"> bzero
+</span><span class="com">#define</span><span class="pln"> bzero</span><span class="pun">(</span><span class="pln">b</span><span class="pun">,</span><span class="pln">len</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="pln">memset</span><span class="pun">((</span><span class="pln">b</span><span class="pun">),</span><span class="pln"> </span><span class="str">'\0'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">(</span><span class="pln">len</span><span class="pun">)),</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">void</span><span class="pun">)</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln">
+</span><span class="com">#endif</span><span class="pln"> </span><span class="com">// bzero</span><span class="pln">
+</span><span class="com">#ifndef</span><span class="pln"> bcopy
+</span><span class="com">#define</span><span class="pln"> bcopy</span><span class="pun">(</span><span class="pln">b1</span><span class="pun">,</span><span class="pln">b2</span><span class="pun">,</span><span class="pln">len</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="pln">memmove</span><span class="pun">((</span><span class="pln">b2</span><span class="pun">),</span><span class="pln"> </span><span class="pun">(</span><span class="pln">b1</span><span class="pun">),</span><span class="pln"> </span><span class="pun">(</span><span class="pln">len</span><span class="pun">)),</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">void</span><span class="pun">)</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln">
+</span><span class="com">#endif</span><span class="pln"> </span><span class="com">// bcopy</span><span class="pln">
+
+</span><span class="com">/*WAV*/</span><span class="pln">
+
+
+</span><span class="kwd">typedef</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> wav_header
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// RIFF Header</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> riff_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "RIFF"</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> wav_size</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Size of the wav portion of the file, which follows the first 8 bytes. File size - 8</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> wave_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "WAVE"</span><span class="pln">
+
+    </span><span class="com">// Format Header</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> fmt_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "fmt " (includes trailing space)</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> fmt_chunk_size</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Should be 16 for PCM</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> audio_format</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Should be 1 for PCM. 3 for IEEE Float</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> num_channels</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> sample_rate</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> byte_rate</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Number of bytes per second. sample_rate * num_channels * Bytes Per Sample</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> sample_alignment</span><span class="pun">;</span><span class="pln"> </span><span class="com">// num_channels * Bytes Per Sample</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> bit_depth</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Number of bits per sample</span><span class="pln">
+
+    </span><span class="com">// Data</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> data_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "data"</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> data_bytes</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Number of bytes in data. Number of samples * num_channels * sample byte size</span><span class="pln">
+    </span><span class="com">// uint8_t bytes[]; // Remainder of wave file is bytes</span><span class="pln">
+</span><span class="pun">}</span><span class="pln"> wav_header</span><span class="pun">;</span><span class="pln">
+
+
+
+
+
+
+
+
+</span><span class="kwd">int</span><span class="pln"> main</span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> ac</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">char</span><span class="pln"> </span><span class="pun">**</span><span class="pln">av</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+    FILE </span><span class="pun">*</span><span class="kwd">in</span><span class="pun">,*</span><span class="kwd">out</span><span class="pun">,*</span><span class="pln">outa</span><span class="pun">;</span><span class="pln">
+    wav_header ahead</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*</span><span class="pln">buffer</span><span class="pun">,*</span><span class="pln">p</span><span class="pun">,</span><span class="pln">ccode</span><span class="pun">[</span><span class="lit">5</span><span class="pun">],*</span><span class="pln">strbuf</span><span class="pun">,*</span><span class="pln">strp</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> count</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">,</span><span class="pln">abytes</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> len </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">ac </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"use %s &lt;file&gt; \n"</span><span class="pun">,</span><span class="pln">av</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]));</span><span class="pln">
+
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="kwd">in</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">av</span><span class="pun">[</span><span class="lit">1</span><span class="pun">],</span><span class="str">"rb"</span><span class="pun">)))</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for reading.\n"</span><span class="pun">,</span><span class="pln">av</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]));</span><span class="pln">
+
+    </span><span class="com">/* try to allocate a buffer size of infile */</span><span class="pln">
+    fseek</span><span class="pun">(</span><span class="kwd">in</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="pln">SEEK_END</span><span class="pun">);</span><span class="pln">
+    bufsiz </span><span class="pun">=</span><span class="pln"> ftell</span><span class="pun">(</span><span class="kwd">in</span><span class="pun">);</span><span class="pln">
+    rewind</span><span class="pun">(</span><span class="kwd">in</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">buffer </span><span class="pun">=</span><span class="pln"> malloc</span><span class="pun">(</span><span class="pln">bufsiz</span><span class="pun">)))</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"unable to allocate %d bytes\n"</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">));</span><span class="pln">
+    p </span><span class="pun">=</span><span class="pln"> buffer</span><span class="pun">;</span><span class="pln">
+    </span><span class="com">/* open output */</span><span class="pln">
+
+
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">strbuf </span><span class="pun">=</span><span class="pln"> malloc</span><span class="pun">(</span><span class="pln">strlen</span><span class="pun">(</span><span class="pln">av</span><span class="pun">[</span><span class="lit">1</span><span class="pun">])+</span><span class="lit">5</span><span class="pun">)))</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"no mem for strings\n"</span><span class="pun">));</span><span class="pln">
+
+
+    strp </span><span class="pun">=</span><span class="pln"> strstr</span><span class="pun">(</span><span class="pln">av</span><span class="pun">[</span><span class="lit">1</span><span class="pun">],</span><span class="str">".264"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">strp </span><span class="pun">!=</span><span class="pln"> NULL</span><span class="pun">)</span><span class="pln">
+        </span><span class="pun">*</span><span class="pln">strp </span><span class="pun">=</span><span class="pln"> </span><span class="str">'\0'</span><span class="pun">;</span><span class="pln">
+    strp </span><span class="pun">=</span><span class="pln"> av</span><span class="pun">[</span><span class="lit">1</span><span class="pun">];</span><span class="pln">
+
+
+    sprintf</span><span class="pun">(</span><span class="pln">strbuf</span><span class="pun">,</span><span class="str">"%s.mp4"</span><span class="pun">,</span><span class="pln">strp</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="kwd">out</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">strbuf</span><span class="pun">,</span><span class="str">"wb"</span><span class="pun">)))</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for writing.\n"</span><span class="pun">,</span><span class="pln">av</span><span class="pun">[</span><span class="lit">2</span><span class="pun">]));</span><span class="pln">
+
+    sprintf</span><span class="pun">(</span><span class="pln">strbuf</span><span class="pun">,</span><span class="str">"%s.wav"</span><span class="pun">,</span><span class="pln">strp</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">outa </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">strbuf</span><span class="pun">,</span><span class="str">"wb"</span><span class="pun">)))</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for writing.\n"</span><span class="pun">,</span><span class="pln">strbuf</span><span class="pun">));</span><span class="pln">
+
+    fwrite</span><span class="pun">(&amp;</span><span class="pln">ahead</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">wav_header</span><span class="pun">),</span><span class="lit">1</span><span class="pun">,</span><span class="pln">outa</span><span class="pun">);</span><span class="pln">
+    </span><span class="com">/* get data */</span><span class="pln">
+    count </span><span class="pun">=</span><span class="pln"> fread</span><span class="pun">(</span><span class="pln">buffer</span><span class="pun">,</span><span class="lit">1</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">,</span><span class="kwd">in</span><span class="pun">);</span><span class="pln">
+    abytes </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">count </span><span class="pun">!=</span><span class="pln"> bufsiz</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        printf</span><span class="pun">(</span><span class="str">"could only read %d of %d bytes\n"</span><span class="pun">,</span><span class="pln">count</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    </span><span class="com">/* Throw first 0x10 bytes of garbage/fileheader plus first videoheader */</span><span class="pln">
+    p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">0x10</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">while</span><span class="pun">(</span><span class="pln">p</span><span class="pun">-</span><span class="pln">buffer </span><span class="pun">&lt;</span><span class="pln"> bufsiz</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        bzero</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">,</span><span class="lit">5</span><span class="pun">);</span><span class="pln">
+        bcopy</span><span class="pun">(</span><span class="pln">p</span><span class="pun">,</span><span class="pln">ccode</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+        p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+        bcopy</span><span class="pun">(</span><span class="pln">p</span><span class="pun">,&amp;</span><span class="pln">len</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">strncmp</span><span class="pun">((</span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*)</span><span class="pln">ccode</span><span class="pun">,</span><span class="str">"HXAF"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">)))</span><span class="pln">
+        </span><span class="pun">{</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">0xc</span><span class="pun">;</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"> </span><span class="com">// {0x0001, 0x5000} whatever that means, it must go, it's no audio</span><span class="pln">
+            len </span><span class="pun">-=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+            printf</span><span class="pun">(</span><span class="str">"code: HXAF audio  %d bytes\n"</span><span class="pun">,</span><span class="pln">len</span><span class="pun">);</span><span class="pln">
+            fwrite</span><span class="pun">(</span><span class="pln">p</span><span class="pun">,</span><span class="lit">1</span><span class="pun">,</span><span class="pln">len</span><span class="pun">,</span><span class="pln">outa</span><span class="pun">);</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> len</span><span class="pun">;</span><span class="pln">
+            abytes </span><span class="pun">+=</span><span class="pln"> len</span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">continue</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        </span><span class="kwd">else</span><span class="pln"> </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">strncmp</span><span class="pun">((</span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*)</span><span class="pln">ccode</span><span class="pun">,</span><span class="str">"HXFI"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">)))</span><span class="pln">
+        </span><span class="pun">{</span><span class="pln">
+            printf</span><span class="pun">(</span><span class="str">"found code HXFI, exit\n"</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">break</span><span class="pun">;</span><span class="pln"> </span><span class="com">/* some sort of table follows */</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        </span><span class="com">/* this will break if there's some other ccode ! */</span><span class="pln">
+        printf</span><span class="pun">(</span><span class="str">"code: %s video %d bytes\n"</span><span class="pun">,</span><span class="pln">ccode</span><span class="pun">,</span><span class="pln">len</span><span class="pun">);</span><span class="pln">
+        p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">0xc</span><span class="pun">;</span><span class="pln">
+        fwrite</span><span class="pun">(</span><span class="pln">p</span><span class="pun">,</span><span class="lit">1</span><span class="pun">,</span><span class="pln">len</span><span class="pun">,</span><span class="kwd">out</span><span class="pun">);</span><span class="pln">
+        p </span><span class="pun">+=</span><span class="pln"> len</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">/* wav header */</span><span class="pln">
+
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">riff_header</span><span class="pun">,</span><span class="str">"RIFF"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">wave_header</span><span class="pun">,</span><span class="str">"WAVE"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">fmt_header</span><span class="pun">,</span><span class="str">"fmt "</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">data_header</span><span class="pun">,</span><span class="str">"data"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+
+    ahead</span><span class="pun">.</span><span class="pln">fmt_chunk_size </span><span class="pun">=</span><span class="pln"> </span><span class="lit">16</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">audio_format </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0x6</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">num_channels </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">sample_rate </span><span class="pun">=</span><span class="pln"> </span><span class="lit">8000</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">byte_rate </span><span class="pun">=</span><span class="pln"> </span><span class="lit">8000</span><span class="pun">;</span><span class="pln"> </span><span class="com">// 16 ??</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">sample_alignment </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">bit_depth </span><span class="pun">=</span><span class="pln"> </span><span class="lit">16</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">data_bytes </span><span class="pun">=</span><span class="pln"> abytes</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">wav_size </span><span class="pun">=</span><span class="pln"> abytes </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">wav_header</span><span class="pun">)</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">8</span><span class="pun">;</span><span class="pln">
+    fseek</span><span class="pun">(</span><span class="pln">outa</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="pln">SEEK_SET</span><span class="pun">);</span><span class="pln">
+    fwrite</span><span class="pun">(&amp;</span><span class="pln">ahead</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">wav_header</span><span class="pun">),</span><span class="lit">1</span><span class="pun">,</span><span class="pln">outa</span><span class="pun">);</span><span class="pln">
+
+    free</span><span class="pun">(</span><span class="pln">buffer</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="kwd">in</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="kwd">out</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="pln">outa</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">exit</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+
+</span><span class="pun">}</span><span class="pln">
+</span><br><br><br></code><br></pre>
+<br>
+<h3>Ian Macallan took the time to think of a way to fix the fps issue and came up with the following code:
+<pre class="prettyprint prettyprinted" style=""><code class="language-c"><br><br><span class="typ">Hi</span><span class="pln">
+
+I have </span><span class="kwd">done</span><span class="pln"> some modifications </span><span class="kwd">in</span><span class="pln"> your program</span><span class="pun">.</span><span class="pln">
+
+</span><span class="typ">The</span><span class="pln"> reason </span><span class="kwd">is</span><span class="pln"> that </span><span class="kwd">when</span><span class="pln"> you </span><span class="kwd">do</span><span class="pln"> mkvmerge </span><span class="kwd">in</span><span class="pln"> a file you need timestamp </span><span class="pun">(</span><span class="pln">mainly </span><span class="kwd">for</span><span class="pln"> the video</span><span class="pun">).</span><span class="pln">
+
+</span><span class="typ">So</span><span class="pln"> I create timestamp file </span><span class="pun">(</span><span class="pln">skipping SPS </span><span class="kwd">end</span><span class="pln"> PPS units</span><span class="pun">).</span><span class="pln">
+
+</span><span class="typ">Then</span><span class="pln"> enable to have a correct </span><span class="pun">.</span><span class="pln">mkv file </span><span class="kwd">from</span><span class="pln"> the </span><span class="pun">.</span><span class="lit">264</span><span class="pln"> </span><span class="kwd">using</span><span class="pln"> timestamp file</span><span class="pun">.</span><span class="pln">
+
+
+</span><span class="com">/*
+ * convert weird *.264 file to mp4 and wav
+ * -raspo666 2018
+ */</span><span class="pln">
+
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;stdio.h&gt;</span><span class="pln">
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;stdlib.h&gt;</span><span class="pln">
+</span><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;string.h&gt;</span><span class="pln">
+
+
+</span><span class="com">/* WAV */</span><span class="pln">
+</span><span class="kwd">typedef</span><span class="pln"> </span><span class="kwd">struct</span><span class="pln"> wav_header
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="com">// RIFF Header</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> riff_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "RIFF"</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> wav_size</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Size of the wav portion of the file, which follows the first 8 bytes. File size - 8</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> wave_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "WAVE"</span><span class="pln">
+
+    </span><span class="com">// Format Header</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> fmt_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "fmt " (includes trailing space)</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> fmt_chunk_size</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Should be 16 for PCM</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> audio_format</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Should be 1 for PCM. 3 for IEEE Float</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> num_channels</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> sample_rate</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> byte_rate</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Number of bytes per second. sample_rate * num_channels * Bytes Per Sample</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> sample_alignment</span><span class="pun">;</span><span class="pln"> </span><span class="com">// num_channels * Bytes Per Sample</span><span class="pln">
+    </span><span class="kwd">short</span><span class="pln"> bit_depth</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Number of bits per sample</span><span class="pln">
+
+    </span><span class="com">// Data</span><span class="pln">
+    </span><span class="kwd">char</span><span class="pln"> data_header</span><span class="pun">[</span><span class="lit">4</span><span class="pun">];</span><span class="pln"> </span><span class="com">// Contains "data"</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> data_bytes</span><span class="pun">;</span><span class="pln"> </span><span class="com">// Number of bytes in data. Number of samples * num_channels * sample byte size</span><span class="pln">
+    </span><span class="com">// uint8_t bytes[]; // Remainder of wave file is bytes</span><span class="pln">
+</span><span class="pun">}</span><span class="pln"> wav_header</span><span class="pun">;</span><span class="pln">
+
+</span><span class="com">/**
+    Main
+ **/</span><span class="pln">
+</span><span class="kwd">int</span><span class="pln"> main</span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> ac</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">char</span><span class="pln"> </span><span class="pun">**</span><span class="pln">argValue</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+    FILE </span><span class="pun">*</span><span class="pln">rawFile</span><span class="pun">,*</span><span class="pln">videoFile</span><span class="pun">,*</span><span class="pln">audioFile</span><span class="pun">;</span><span class="pln">
+    FILE </span><span class="pun">*</span><span class="pln">videoTSFile</span><span class="pun">,*</span><span class="pln">audioTSFile</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">int</span><span class="pln"> firstVideoTS </span><span class="pun">=</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> firstAudioTS </span><span class="pun">=</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+
+
+    wav_header ahead</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*</span><span class="pln">pFullBuffer</span><span class="pun">,*</span><span class="pln">p</span><span class="pun">,</span><span class="pln"> ccode</span><span class="pun">[</span><span class="lit">5</span><span class="pun">],</span><span class="pln"> </span><span class="pun">*</span><span class="pln">pFilename</span><span class="pun">,</span><span class="pln"> </span><span class="pun">*</span><span class="pln">pString</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> count</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">,</span><span class="pln">abytes</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> len </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">ac </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"use %s &lt;file&gt; \n"</span><span class="pun">,</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">rawFile </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">1</span><span class="pun">],</span><span class="str">"rb"</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for reading.\n"</span><span class="pun">,</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">/* try to allocate a pFullBuffer size of infile */</span><span class="pln">
+    fseek</span><span class="pun">(</span><span class="pln">rawFile</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="pln">SEEK_END</span><span class="pun">);</span><span class="pln">
+    bufsiz </span><span class="pun">=</span><span class="pln"> ftell</span><span class="pun">(</span><span class="pln">rawFile</span><span class="pun">);</span><span class="pln">
+    rewind</span><span class="pun">(</span><span class="pln">rawFile</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">pFullBuffer </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="pln"> </span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="pun">)</span><span class="pln"> malloc</span><span class="pun">(</span><span class="pln">bufsiz</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"unable to allocate %d bytes\n"</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    p </span><span class="pun">=</span><span class="pln"> pFullBuffer</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">/* open output */</span><span class="pln">
+
+
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">pFilename </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">char</span><span class="pun">*)</span><span class="pln"> malloc</span><span class="pun">(</span><span class="pln">strlen</span><span class="pun">(</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">1</span><span class="pun">])+</span><span class="lit">5</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"no mem for strings\n"</span><span class="pun">));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">//    Input Raw file</span><span class="pln">
+    pString </span><span class="pun">=</span><span class="pln"> strstr</span><span class="pun">(</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">1</span><span class="pun">],</span><span class="str">".264"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">pString </span><span class="pun">!=</span><span class="pln"> NULL</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="pun">*</span><span class="pln">pString </span><span class="pun">=</span><span class="pln"> </span><span class="str">'\0'</span><span class="pun">;</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    pString </span><span class="pun">=</span><span class="pln"> argValue</span><span class="pun">[</span><span class="lit">1</span><span class="pun">];</span><span class="pln">
+
+    </span><span class="com">//    Video File</span><span class="pln">
+    sprintf</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"%s.h264"</span><span class="pun">,</span><span class="pln">pString</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">videoFile </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"wb"</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for writing.\n"</span><span class="pun">,</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">2</span><span class="pun">]));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">//    Video Timestamp</span><span class="pln">
+    sprintf</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"%s.video.ts.txt"</span><span class="pun">,</span><span class="pln">pString</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">videoTSFile </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"w"</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for writing.\n"</span><span class="pun">,</span><span class="pln">argValue</span><span class="pun">[</span><span class="lit">2</span><span class="pun">]));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    fprintf </span><span class="pun">(</span><span class="pln"> videoTSFile</span><span class="pun">,</span><span class="pln"> </span><span class="str">"# timestamp format v2\n"</span><span class="pln"> </span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">//    Wav File</span><span class="pln">
+    sprintf</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"%s.wav"</span><span class="pun">,</span><span class="pln">pString</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">audioFile </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"wb"</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for writing.\n"</span><span class="pun">,</span><span class="pln">pFilename</span><span class="pun">));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">//    Wav Timestamp File</span><span class="pln">
+    sprintf</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"%s.audio.ts.txt"</span><span class="pun">,</span><span class="pln">pString</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">audioTSFile </span><span class="pun">=</span><span class="pln"> fopen</span><span class="pun">(</span><span class="pln">pFilename</span><span class="pun">,</span><span class="str">"w"</span><span class="pun">)))</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"cannot open %s for writing.\n"</span><span class="pun">,</span><span class="pln">pFilename</span><span class="pun">));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    fprintf </span><span class="pun">(</span><span class="pln"> audioTSFile</span><span class="pun">,</span><span class="pln"> </span><span class="str">"# timestamp format v2\n"</span><span class="pln"> </span><span class="pun">);</span><span class="pln">
+
+    fwrite</span><span class="pun">(&amp;</span><span class="pln">ahead</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">wav_header</span><span class="pun">),</span><span class="lit">1</span><span class="pun">,</span><span class="pln">audioFile</span><span class="pun">);</span><span class="pln">
+
+    </span><span class="com">/* get data */</span><span class="pln">
+    count </span><span class="pun">=</span><span class="pln"> fread</span><span class="pun">(</span><span class="pln">pFullBuffer</span><span class="pun">,</span><span class="lit">1</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">,</span><span class="pln">rawFile</span><span class="pun">);</span><span class="pln">
+    abytes </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln">count </span><span class="pun">!=</span><span class="pln"> bufsiz</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        printf</span><span class="pun">(</span><span class="str">"could only read %d of %d bytes\n"</span><span class="pun">,</span><span class="pln">count</span><span class="pun">,</span><span class="pln">bufsiz</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">/* Throw first 0x10 bytes of garbage/fileheader plus first videoheader */</span><span class="pln">
+    </span><span class="com">// HXVS</span><span class="pln">
+    memset</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">));</span><span class="pln">
+    memcpy</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">,</span><span class="pln"> p</span><span class="pun">,</span><span class="pln"> </span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pun">(</span><span class="pln"> </span><span class="pun">!</span><span class="pln"> strncmp</span><span class="pun">((</span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*)</span><span class="pln">ccode</span><span class="pun">,</span><span class="str">"HXVS"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">)</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">exit</span><span class="pun">(</span><span class="pln">printf</span><span class="pun">(</span><span class="str">"No HXVS.\n"</span><span class="pun">));</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+    p    </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">//    ??</span><span class="pln">
+    p    </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">// Duration</span><span class="pln">
+    </span><span class="kwd">int</span><span class="pln"> duration</span><span class="pun">;</span><span class="pln">
+    memcpy</span><span class="pun">(&amp;</span><span class="pln">duration</span><span class="pun">,</span><span class="pln"> p</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">));</span><span class="pln">
+    printf</span><span class="pun">(</span><span class="str">"Duration %d\n"</span><span class="pun">,</span><span class="pln"> duration</span><span class="pun">);</span><span class="pln">
+
+    p    </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="com">//    ??</span><span class="pln">
+    p     </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+    </span><span class="kwd">while</span><span class="pun">(</span><span class="pln">p </span><span class="pun">-</span><span class="pln"> pFullBuffer </span><span class="pun">&lt;</span><span class="pln"> bufsiz</span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="com">//    Code</span><span class="pln">
+        memset</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">));</span><span class="pln">
+        memcpy</span><span class="pun">(</span><span class="pln">ccode</span><span class="pun">,</span><span class="pln"> p</span><span class="pun">,</span><span class="pln"> </span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+        p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+        </span><span class="com">//    The Length</span><span class="pln">
+        memcpy</span><span class="pun">(&amp;</span><span class="pln">len</span><span class="pun">,</span><span class="pln"> p</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">));</span><span class="pln">
+        p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+        </span><span class="com">//</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pun">(</span><span class="pln"> strncmp</span><span class="pun">((</span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*)</span><span class="pln">ccode</span><span class="pun">,</span><span class="str">"HXAF"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">)</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+        </span><span class="pun">{</span><span class="pln">
+            </span><span class="com">//     Timestamp</span><span class="pln">
+            </span><span class="kwd">int</span><span class="pln"> ts</span><span class="pun">;</span><span class="pln">
+            memcpy</span><span class="pun">(&amp;</span><span class="pln">ts</span><span class="pun">,</span><span class="pln">p</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">));</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln"> firstAudioTS </span><span class="pun">==</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+            </span><span class="pun">{</span><span class="pln">
+                firstAudioTS </span><span class="pun">=</span><span class="pln"> ts</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+            fprintf </span><span class="pun">(</span><span class="pln"> audioTSFile</span><span class="pun">,</span><span class="pln"> </span><span class="str">"%d\n"</span><span class="pun">,</span><span class="pln"> ts </span><span class="pun">-</span><span class="pln"> firstAudioTS </span><span class="pun">);</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+            </span><span class="com">//    ??</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+            </span><span class="com">//    Audio</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"> </span><span class="com">// {0x0001, 0x5000} whatever that means, it must go, it's no audio</span><span class="pln">
+            len </span><span class="pun">-=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+            </span><span class="com">// printf("code: HXAF audio  %d bytes\n",len);</span><span class="pln">
+            fwrite</span><span class="pun">(</span><span class="pln">p</span><span class="pun">,</span><span class="lit">1</span><span class="pun">,</span><span class="pln">len</span><span class="pun">,</span><span class="pln">audioFile</span><span class="pun">);</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> len</span><span class="pun">;</span><span class="pln">
+            abytes </span><span class="pun">+=</span><span class="pln"> len</span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">continue</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pun">(</span><span class="pln"> strncmp</span><span class="pun">((</span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*)</span><span class="pln">ccode</span><span class="pun">,</span><span class="str">"HXVF"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">)</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+        </span><span class="pun">{</span><span class="pln">
+            </span><span class="com">//    Timestamp</span><span class="pln">
+            </span><span class="kwd">int</span><span class="pln"> ts</span><span class="pun">;</span><span class="pln">
+            memcpy</span><span class="pun">(&amp;</span><span class="pln">ts</span><span class="pun">,</span><span class="pln">p</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">int</span><span class="pun">));</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln"> firstVideoTS </span><span class="pun">==</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+            </span><span class="pun">{</span><span class="pln">
+                firstVideoTS </span><span class="pun">=</span><span class="pln"> ts</span><span class="pun">;</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+
+            </span><span class="kwd">int</span><span class="pln"> </span><span class="typ">NalUnit</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> p </span><span class="pun">[</span><span class="pln"> </span><span class="lit">12</span><span class="pln"> </span><span class="pun">]</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln"> </span><span class="lit">0x1f</span><span class="pun">;</span><span class="pln">
+            </span><span class="com">//    Do not set TimeStampp for SPS...</span><span class="pln">
+            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln"> </span><span class="typ">NalUnit</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">0x6</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> </span><span class="typ">NalUnit</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">0x7</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> </span><span class="typ">NalUnit</span><span class="pln"> </span><span class="pun">!=</span><span class="pln"> </span><span class="lit">0x8</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+            </span><span class="pun">{</span><span class="pln">
+                fprintf </span><span class="pun">(</span><span class="pln"> videoTSFile</span><span class="pun">,</span><span class="pln"> </span><span class="str">"%d\n"</span><span class="pun">,</span><span class="pln"> ts </span><span class="pun">-</span><span class="pln"> firstVideoTS </span><span class="pun">);</span><span class="pln">
+            </span><span class="pun">}</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+            </span><span class="com">//    ??</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+
+            </span><span class="com">//</span><span class="pln">
+            fwrite</span><span class="pun">(</span><span class="pln">p</span><span class="pun">,</span><span class="lit">1</span><span class="pun">,</span><span class="pln">len</span><span class="pun">,</span><span class="pln">videoFile</span><span class="pun">);</span><span class="pln">
+            p </span><span class="pun">+=</span><span class="pln"> len</span><span class="pun">;</span><span class="pln">
+            </span><span class="kwd">continue</span><span class="pun">;</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        </span><span class="kwd">else</span><span class="pln"> </span><span class="kwd">if</span><span class="pun">(!(</span><span class="pln">strncmp</span><span class="pun">((</span><span class="kwd">char</span><span class="pln"> </span><span class="pun">*)</span><span class="pln">ccode</span><span class="pun">,</span><span class="str">"HXFI"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">)))</span><span class="pln">
+        </span><span class="pun">{</span><span class="pln">
+            printf</span><span class="pun">(</span><span class="str">"HXFI End if File\n"</span><span class="pun">);</span><span class="pln">
+            </span><span class="kwd">break</span><span class="pun">;</span><span class="pln"> </span><span class="com">/* some sort of table follows */</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+        </span><span class="kwd">else</span><span class="pln">
+        </span><span class="pun">{</span><span class="pln">
+            printf</span><span class="pun">(</span><span class="str">"Unknown Code\n"</span><span class="pun">);</span><span class="pln">
+        </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+    </span><span class="com">/* wav header */</span><span class="pln">
+
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">riff_header</span><span class="pun">,</span><span class="str">"RIFF"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">wave_header</span><span class="pun">,</span><span class="str">"WAVE"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">fmt_header</span><span class="pun">,</span><span class="str">"fmt "</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+    strncpy</span><span class="pun">(</span><span class="pln">ahead</span><span class="pun">.</span><span class="pln">data_header</span><span class="pun">,</span><span class="str">"data"</span><span class="pun">,</span><span class="lit">4</span><span class="pun">);</span><span class="pln">
+
+    ahead</span><span class="pun">.</span><span class="pln">fmt_chunk_size </span><span class="pun">=</span><span class="pln"> </span><span class="lit">16</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">audio_format </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0x6</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">num_channels </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">sample_rate </span><span class="pun">=</span><span class="pln"> </span><span class="lit">8000</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">byte_rate </span><span class="pun">=</span><span class="pln"> </span><span class="lit">8000</span><span class="pun">;</span><span class="pln"> </span><span class="com">// 16 ??</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">sample_alignment </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">bit_depth </span><span class="pun">=</span><span class="pln"> </span><span class="lit">16</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">data_bytes </span><span class="pun">=</span><span class="pln"> abytes</span><span class="pun">;</span><span class="pln">
+    ahead</span><span class="pun">.</span><span class="pln">wav_size </span><span class="pun">=</span><span class="pln"> abytes </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">wav_header</span><span class="pun">)</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> </span><span class="lit">8</span><span class="pun">;</span><span class="pln">
+    fseek</span><span class="pun">(</span><span class="pln">audioFile</span><span class="pun">,</span><span class="lit">0</span><span class="pun">,</span><span class="pln">SEEK_SET</span><span class="pun">);</span><span class="pln">
+    fwrite</span><span class="pun">(&amp;</span><span class="pln">ahead</span><span class="pun">,</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="pln">wav_header</span><span class="pun">),</span><span class="lit">1</span><span class="pun">,</span><span class="pln">audioFile</span><span class="pun">);</span><span class="pln">
+
+    free</span><span class="pun">(</span><span class="pln">pFullBuffer</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="pln">rawFile</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="pln">videoFile</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="pln">audioFile</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="pln">videoTSFile</span><span class="pun">);</span><span class="pln">
+    fclose</span><span class="pun">(</span><span class="pln">audioTSFile</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">exit</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+
+</span><span class="pun">}</span><span class="pln"> 
+</span><br><br><br></code><br></pre>
+Quote from his mail:<br>
+<hr>
+The .264 does not have a constant framerate but the file contains the timestamp (in milliseconds).
+So I extract those timestamp in timecode v2 format for audio and video (with the .wav and .h264).
+Then I convert the ALAW/G711/PCMU/PCMA to mp3 :
+ffmpeg -i "the.wav" -y "the.mp3"
+The timestamp for audio are not used (audio is correct because they are small and cannot miss any part).
+Then I merge the .h264, the  .mp3 are use the video timestamp.
+mkvmerge.exe --ui-language fr --output "output.mkv" --timestamps "0:the.video.ts.txt" "the.h264" "the.mp3"
+This produces a correct mkv file that have frames correctly synchronized.
+
+In the program I produce timestamp only for video part so I omit the H264 SPS, PPS and so on
+because only video parts (IDR and slices) are normally with timestamp. 
+
+<hr>
+
+
+
+
+
+<br>
+<br>
+
+
+Feel free to use the Paypal button if you find this useful and you can afford it :-).
+<br>
+<br>
+<sup id="fn1">1. [Some Installations of VLC need tweaking h/x264 settings to make it play mp4, without a container header....]<a href="https://spitzner.org/kkmoon.html#ref1" title="Jump back to footnote 1 in the text.">*</a></sup>
+
+  </h3></div>
+  <div style="text-align: left;">
+  
+  <pre>Changelog:
+02/14/18 - fixed typo in convert.c /*comment*/.
+07/30/18 - added framerate comment and rant...
+01/12/20 - added Ian Macallan's version
+09/13/20 - added Link to Tony's app
+
+  </pre>
+  </div>
+
+
+
+
+</div>
+<!-- content -->
+</div>
+
+
+</body></html>
