@@ -14,6 +14,7 @@ m_sprites_count   = None
 m_sprites_offsets = None
 m_file_handle     = None
 m_sprites         = None
+m_sprites_data    = None
 
 def load_file(path):
     global m_file_ver
@@ -21,45 +22,49 @@ def load_file(path):
     global m_sprites_offsets
     global m_file_handle
     global m_sprites
+    global m_sprites_data
+    m_sprites_data = []
     m_file_handle     = open(path, "rb")
-    m_file_ver        = int(numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0])
-    m_sprites_count   = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
+    m_file_ver        = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0]
+    m_sprites_count   = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
     m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count)
-    m_sprites         = [load_sprite(x) for x in range(m_sprites_count)]
+    m_sprites         = [_load_sprite(x) for x in range(m_sprites_count)]
     m_file_handle.close()
 
-def load_sprite(sprite_idx):
+def _load_sprite(sprite_idx):
     global m_file_handle
     global m_sprites_offsets
-    if sprite_idx  != None: m_file_handle.seek(m_sprites_offsets[sprite_idx], 0)
+    global m_sprites_data
+    m_file_handle.seek(m_sprites_offsets[5], 0)
     transparent_key = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=3)
-    sprite_size     = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
-    t_pixels_number = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
-    c_pixels_number = int(numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0])
+    sprite_size     = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
     sprite_data     = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=sprite_size)
-    total_pixels    = int(t_pixels_number+c_pixels_number)
-    sprite_n        = int(math.floor(math.sqrt(total_pixels)))
-    package = {'transparent_key':transparent_key,'sprite_size':sprite_size,'total_pixels':total_pixels,'sprite_n':sprite_n,'sprite_data':sprite_data}
-    return package
+    print(str(sprite_size))
+    m_sprites_data.append(_sprite_data2img(sprite_data,32,[255,0,255]))
 
-def sprite_data(idx):
-    global m_sprites
-    i=0
-    sprite = m_sprites[idx]
-    n = sprite['sprite_n']
-    data = numpy.array(sprite['sprite_data'])
-    blank_image = numpy.zeros((n,n,3), numpy.uint8)
-    for y in range(n):
-        for x in range(n):
-            if len(data)>(i+2):
-                pixel = (data[i+2],data[i+1],data[i])
-                blank_image[x,y]=pixel
-                i=i+3
-    return blank_image
+def _sprite_data2img(sprite_data,n,transparent_color):
+    raw_data = numpy.zeros(n*n*3,dtype=numpy.uint8)
+    offset = 0
+    while offset < len(sprite_data):
+        pix_offsets         = numpy.frombuffer(sprite_data, dtype = numpy.uint16,count=2,offset=offset)
+        color_bytes_to_read = numpy.uint16(pix_offsets[1]*3)
+        color_data          = numpy.frombuffer(sprite_data, dtype = numpy.uint8,count=color_bytes_to_read,offset=offset+4)
+        raw_data=_memcpy(raw_data,transparent_color*pix_offsets[0],offset)
+        offset=offset+color_bytes_to_read+4
+        raw_data=_memcpy(raw_data,color_data,offset)
+    return raw_data.reshape((n,n,3))
+
+def _memcpy(dst,src,dst_offset):
+    for idx in range(len(src)):
+        if len(dst) > (dst_offset+idx): dst[(dst_offset+idx)] = numpy.uint8(src[idx])
+    return dst
 
 def ex_sprites_to_dir(path):
-    global m_sprites_count
-    [cv2.imwrite(path+'/'+str(x)+'.bmp', sprite_data(x)) for x in range(m_sprites_count)]
+    global m_sprites_data
+    idx=0
+    for x in m_sprites_data:
+        cv2.imwrite(path+'/'+str(idx)+'.bmp', x)
+        idx=idx+1
 
 if __name__ == "__main__":
     load_file('Tibia.spr')
