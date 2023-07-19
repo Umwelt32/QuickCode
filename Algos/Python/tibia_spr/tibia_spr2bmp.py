@@ -64,12 +64,11 @@ def _memcpy(dst,src,dst_offset):
         if len(dst) > (dst_offset+idx): dst[(dst_offset+idx)] = numpy.uint8(src[idx])
     return dst
 
-def ex_sprites_to_dir(path):
+def ex_sprites_to_dir(path,ext='bmp'):
     global m_sprites_data
     idx=0
     for x in m_sprites_data:
-        _x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
-        cv2.imwrite(path+'/'+str(idx)+'.bmp', _x)
+        cv2.imwrite(path+'/'+str(idx)+'.'+str(ext), cv2.cvtColor(x, cv2.COLOR_BGR2RGB))
         idx=idx+1
 
 def ex_sprites_to_bmp(n,m,h,file_path):
@@ -93,7 +92,8 @@ def ex_sprites_to_bmp(n,m,h,file_path):
         file_idx=file_idx+1
 
 if __name__ == "__main__":
-    load_file('Tibia.spr')
+    #script.py ./Tibia.spr ./output.bmp
+    load_file(sys.argv[1])
     #ex_sprites_to_dir('./out')
-    ex_sprites_to_bmp(128,32,1,'./output.bmp')
+    ex_sprites_to_bmp(128,32,1,sys.argv[2])
     exit(0)
