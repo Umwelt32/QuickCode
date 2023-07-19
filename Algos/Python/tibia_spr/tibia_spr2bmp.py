@@ -39,7 +39,6 @@ def _load_sprite(sprite_idx):
     transparent_key = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=3)
     sprite_size     = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
     sprite_data     = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=sprite_size)
-    print(str(sprite_size))
     m_sprites_data.append(_sprite_data2img(sprite_data,32,transparent_key))
 
 def _sprite_data2img(sprite_data,n,transparent_color):
@@ -73,7 +72,26 @@ def ex_sprites_to_dir(path):
         cv2.imwrite(path+'/'+str(idx)+'.bmp', _x)
         idx=idx+1
 
+def ex_sprites_to_bmp(n,m,merge4,path):
+    global m_sprites_data
+    blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
+    idx=0
+    file_idx=0
+    while idx < len(m_sprites_data):
+        for x in range(0,n*m,m):
+            for y in range(0,n*m,m):
+                if idx < len(m_sprites_data):
+                    if merge4:
+                        print('stub')
+                    else:
+                        blank_image[x:(x+m),y:(y+m)]=m_sprites_data[idx]
+                    idx=idx+1
+        file_idx=file_idx+1
+        cv2.imwrite(path+'/'+str(file_idx)+'.bmp', cv2.cvtColor(blank_image, cv2.COLOR_BGR2RGB))
+        blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
+
 if __name__ == "__main__":
     load_file('Tibia.spr')
-    ex_sprites_to_dir('./out')
+    #ex_sprites_to_dir('./out')
+    ex_sprites_to_bmp(32,32,False,'./out2')
     exit(0)
