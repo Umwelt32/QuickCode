@@ -25,9 +25,9 @@ def load_file(path):
     global m_sprites_data
     m_sprites_data = []
     m_file_handle     = open(path, "rb")
-    m_file_ver        = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0]
-    m_sprites_count   = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
-    m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count)
+    m_file_ver        = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0] #file_ver      - 4bytes
+    m_sprites_count   = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0] #sprites_count - 2bytes
+    m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count) #sprites_offsets - (sprites_count*4) bytes
     m_sprites         = [_load_sprite(x) for x in range(m_sprites_count)]
     m_file_handle.close()
 
@@ -35,26 +35,26 @@ def _load_sprite(sprite_idx):
     global m_file_handle
     global m_sprites_offsets
     global m_sprites_data
-    m_file_handle.seek(m_sprites_offsets[sprite_idx], 0)
-    transparent_key = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=3)
-    sprite_size     = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]
-    sprite_data     = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=sprite_size)
+    m_file_handle.seek(m_sprites_offsets[sprite_idx], 0) #set file position to sprite offset
+    transparent_key = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=3)           #read transparent color - 3bytes
+    sprite_size     = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]        #read current sprite size
+    sprite_data     = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=sprite_size) #read whole data of current sprite
     m_sprites_data.append(_sprite_data2img(sprite_data,32,transparent_key))
 
 def _sprite_data2img(sprite_data,n,transparent_color):
     raw_data = numpy.zeros(n*n*3,dtype=numpy.uint8)
     data_offset= 0
     pixel_byte = 0
-    while data_offset < len(sprite_data):
+    while data_offset < len(sprite_data): #repeat until current sprite data ends
         try:
-            pix_offsets         = numpy.frombuffer(sprite_data, dtype = numpy.uint16,count=2,offset=data_offset)
+            pix_offsets         = numpy.frombuffer(sprite_data, dtype = numpy.uint16,count=2,offset=data_offset) #read num of transparent and color pixels, (2+2)bytes
             color_bytes_to_read = numpy.uint16(pix_offsets[1]*3)
-            color_data          = numpy.frombuffer(sprite_data, dtype = numpy.uint8,count=color_bytes_to_read,offset=(data_offset+4))
-            raw_data=_memcpy(raw_data,transparent_color*pix_offsets[0],pixel_byte)
+            color_data          = numpy.frombuffer(sprite_data, dtype = numpy.uint8,count=color_bytes_to_read,offset=(data_offset+4)) #read color pixels data
+            raw_data=_memcpy(raw_data,transparent_color*pix_offsets[0],pixel_byte) #flush transparent pixels data
             pixel_byte=pixel_byte+(pix_offsets[0]*3)
-            raw_data=_memcpy(raw_data,color_data,pixel_byte)
-            pixel_byte=pixel_byte+color_bytes_to_read
-            data_offset=(data_offset+color_bytes_to_read+4)
+            raw_data=_memcpy(raw_data,color_data,pixel_byte) #flush color pixel data
+            pixel_byte=pixel_byte+color_bytes_to_read        #move over pixel buffer
+            data_offset=(data_offset+color_bytes_to_read+4)  #move over sprite buffer
         except:
             break
     return raw_data.reshape((n,n,3))
@@ -94,5 +94,5 @@ def ex_sprites_to_bmp(n,m,h,path):
 if __name__ == "__main__":
     load_file('Tibia.spr')
     #ex_sprites_to_dir('./out')
-    ex_sprites_to_bmp(32,32,1,'./out2')
+    ex_sprites_to_bmp(128,32,1,'./out2')
     exit(0)
