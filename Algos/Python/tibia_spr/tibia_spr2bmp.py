@@ -72,20 +72,21 @@ def ex_sprites_to_dir(path):
         cv2.imwrite(path+'/'+str(idx)+'.bmp', _x)
         idx=idx+1
 
-def ex_sprites_to_bmp(n,m,merge4,path):
+def ex_sprites_to_bmp(n,m,h,path):
     global m_sprites_data
     blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
     idx=0
     file_idx=0
     while idx < len(m_sprites_data):
-        for x in range(0,n*m,m):
-            for y in range(0,n*m,m):
-                if idx < len(m_sprites_data):
-                    if merge4:
-                        print('stub')
-                    else:
-                        blank_image[x:(x+m),y:(y+m)]=m_sprites_data[idx]
-                    idx=idx+1
+        for x in range(0,n*m,m*h):
+            for y in range(0,n*m,m*h):
+                for z in range(h):
+                    for w in range(h):
+                        if idx < len(m_sprites_data):
+                            x1 = x+((z)*m)
+                            y1 = y+((w)*m)
+                            blank_image[x1:(x1+m),y1:(y1+m)]=m_sprites_data[idx]
+                            idx=idx+1
         file_idx=file_idx+1
         cv2.imwrite(path+'/'+str(file_idx)+'.bmp', cv2.cvtColor(blank_image, cv2.COLOR_BGR2RGB))
         blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
@@ -93,5 +94,5 @@ def ex_sprites_to_bmp(n,m,merge4,path):
 if __name__ == "__main__":
     load_file('Tibia.spr')
     #ex_sprites_to_dir('./out')
-    ex_sprites_to_bmp(32,32,False,'./out2')
+    ex_sprites_to_bmp(32,32,1,'./out2')
     exit(0)
