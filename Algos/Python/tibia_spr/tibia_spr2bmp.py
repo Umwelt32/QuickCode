@@ -76,10 +76,10 @@ def ex_sprites_to_bmp(n,m,h,file_path):
     global m_sprites_data
     file_path=file_path.replace('\\','/')
     base_filename = file_path.split('/')[-1]
-    blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
     idx=0
     file_idx=0
     while idx < len(m_sprites_data):
+        blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
         for x in range(0,n*m,m*h):
             for y in range(0,n*m,m*h):
                 for z in range(h):
@@ -91,7 +91,6 @@ def ex_sprites_to_bmp(n,m,h,file_path):
                             idx=idx+1
         cv2.imwrite(file_path.replace(base_filename,str(file_idx)+'_'+base_filename), cv2.cvtColor(blank_image, cv2.COLOR_BGR2RGB))
         file_idx=file_idx+1
-        blank_image = numpy.zeros((n*m, n*m, 3), dtype=numpy.uint8)
 
 if __name__ == "__main__":
     load_file('Tibia.spr')
