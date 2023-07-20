@@ -31,6 +31,10 @@ def load_file(path):
     m_sprites         = [_load_sprite(x) for x in range(m_sprites_count)]
     m_file_handle.close()
 
+def _get_sprites_data():
+    global m_sprites_data
+    return m_sprites_data
+
 def _get_count_field_size(fver):
     field_size_array = [numpy.uint16,numpy.uint32]
     ver_bytes = [x for x in numpy.uint32(fver).tobytes()]
