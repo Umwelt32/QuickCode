@@ -25,16 +25,23 @@ def load_file(path):
     global m_sprites_data
     m_sprites_data = []
     m_file_handle     = open(path, "rb")
-    m_file_ver        = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0] #file_ver      - 4bytes
-    m_sprites_count   = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0] #sprites_count - 2bytes
-    m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count) #sprites_offsets - (sprites_count*4) bytes
+    m_file_ver        = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=1)[0]                      #file_ver      - 4bytes
+    m_sprites_count   = numpy.fromfile(m_file_handle, dtype=_get_count_field_size(m_file_ver),count=1)[0] #sprites_count - 2 or 4 bytes
+    m_sprites_offsets = numpy.fromfile(m_file_handle, dtype=numpy.uint32,count=m_sprites_count)           #sprites_offsets - (sprites_count*4) bytes
     m_sprites         = [_load_sprite(x) for x in range(m_sprites_count)]
     m_file_handle.close()
+
+def _get_count_field_size(fver):
+    field_size_array = [numpy.uint16,numpy.uint32]
+    ver_bytes = [x for x in numpy.uint32(fver).tobytes()]
+    major_byte = int(ver_bytes[3])
+    return field_size_array[0] if major_byte < 87 else field_size_array[1]
 
 def _load_sprite(sprite_idx):
     global m_file_handle
     global m_sprites_offsets
     global m_sprites_data
+    global m_sprites_count
     m_file_handle.seek(m_sprites_offsets[sprite_idx], 0) #set file position to sprite offset
     transparent_key = numpy.fromfile(m_file_handle, dtype=numpy.uint8, count=3)           #read transparent color - 3bytes
     sprite_size     = numpy.fromfile(m_file_handle, dtype=numpy.uint16,count=1)[0]        #read current sprite size
@@ -64,6 +71,9 @@ def _memcpy(dst,src,dst_offset):
         if len(dst) > (dst_offset+idx): dst[(dst_offset+idx)] = numpy.uint8(src[idx])
     return dst
 
+def _print(st):
+    print(str(st))
+
 def ex_sprites_to_dir(path,ext='bmp'):
     global m_sprites_data
     idx=0
@@ -90,6 +100,7 @@ def ex_sprites_to_bmp(n,m,h,file_path):
                             idx=idx+1
         cv2.imwrite(file_path.replace(base_filename,str(file_idx)+'_'+base_filename), cv2.cvtColor(blank_image, cv2.COLOR_BGR2RGB))
         file_idx=file_idx+1
+
 
 if __name__ == "__main__":
     #script.py ./Tibia.spr ./output.bmp
