@@ -39,7 +39,7 @@ def _get_count_field_size(fver):
     field_size_array = [numpy.uint16,numpy.uint32]
     ver_bytes = [x for x in numpy.uint32(fver).tobytes()]
     major_byte = int(ver_bytes[3])
-    return field_size_array[0] if major_byte < 87 else field_size_array[1]
+    return field_size_array[0] if major_byte < 80 else field_size_array[1]
 
 def _load_sprite(sprite_idx):
     global m_file_handle
