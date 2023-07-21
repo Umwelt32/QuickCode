@@ -9,6 +9,8 @@
 
 import cv2,os,sys,numpy,math
 
+p_params = {"input_file": "Tibia.spr","output": "output.bmp","n": 128,"operation": 0}
+
 m_file_ver        = None
 m_sprites_count   = None
 m_sprites_offsets = None
@@ -107,8 +109,13 @@ def ex_sprites_to_bmp(n,m,h,file_path):
 
 
 if __name__ == "__main__":
-    #script.py ./Tibia.spr ./output.bmp
-    load_file(sys.argv[1])
-    #ex_sprites_to_dir('./out')
-    ex_sprites_to_bmp(128,32,1,sys.argv[2])
+    #script.py ./Tibia.spr ./output.bmp 0
+    if len(sys.argv)>1:p_params['input_file']=str(sys.argv[1])
+    if len(sys.argv)>2:p_params['output']=str(sys.argv[2])
+    if len(sys.argv)>3:p_params['operation']=int(sys.argv[3])
+    load_file(p_params['input_file'])
+    if p_params['operation']==0:
+        ex_sprites_to_bmp(p_params['n'],32,1,p_params['output'])
+    else:
+        ex_sprites_to_dir(p_params['output'])
     exit(0)
