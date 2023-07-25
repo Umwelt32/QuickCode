@@ -87,7 +87,7 @@ def ex_sprites_to_dir(path,ext='bmp'):
         cv2.imwrite(path+'/'+str(idx)+'.'+str(ext), cv2.cvtColor(x, cv2.COLOR_BGR2RGB))
         idx=idx+1
 
-def ex_sprites_to_bmp(n,m,h,file_path):
+def ex_sprites_to_bmp(n,m,h,file_path,grid=False):
     global m_sprites_data
     file_path=file_path.replace('\\','/')
     base_filename = file_path.split('/')[-1]
@@ -103,6 +103,9 @@ def ex_sprites_to_bmp(n,m,h,file_path):
                             x1 = x+((z)*m)
                             y1 = y+((w)*m)
                             blank_image[x1:(x1+m),y1:(y1+m)]=m_sprites_data[idx]
+                            if grid:
+                                blank_image[x1:(x1+m),y1]=255
+                                blank_image[x1,y1:(y1+m)]=255
                             idx=idx+1
         cv2.imwrite(file_path.replace(base_filename,str(file_idx)+'_'+base_filename), cv2.cvtColor(blank_image, cv2.COLOR_BGR2RGB))
         file_idx=file_idx+1
@@ -115,7 +118,7 @@ if __name__ == "__main__":
     if len(sys.argv)>3:p_params['operation']=int(sys.argv[3])
     load_file(p_params['input_file'])
     if p_params['operation']==0:
-        ex_sprites_to_bmp(p_params['n'],32,1,p_params['output'])
+        ex_sprites_to_bmp(p_params['n'],32,1,p_params['output'],False)
     else:
         ex_sprites_to_dir(p_params['output'])
     exit(0)
