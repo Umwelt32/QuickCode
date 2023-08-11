@@ -1,3 +1,12 @@
+##################################################
+## Author: https://github.com/Umwelt32/QuickCode
+## Copyright: 2022
+## Convert DFS algorithm
+## References:
+##############
+##############
+##################################################
+
 import cv2,os,sys,numpy,math
 
 m_maze  = None
@@ -58,7 +67,7 @@ def _setCellValue(x,y,v):
         return True
 
 if __name__ == "__main__":
-    _init(128,256)
+    _init(128,128)
     _dfs_stack()
     _save_img('out.bmp')
     
