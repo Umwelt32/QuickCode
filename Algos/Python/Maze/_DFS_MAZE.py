@@ -9,77 +9,65 @@
 
 import cv2,os,sys,numpy,math
 
-m_maze = None
-m_cell_stack = None
+m_maze  = None
+m_stack = None
 
-def _init(n,r,seed):
+def _init(n,seed):
     global m_maze
-    global m_cell_stack
+    global m_stack
     numpy.random.seed(seed)
-    m_maze = numpy.zeros((n, n), dtype=numpy.uint8)
-    m_cell_stack = []
-    _put_rand_visitor(n,r)
-
-def _put_rand_visitor(n,r):
-    for x in range(r): _setVisited(_rnd_rand_int(0,n-1),_rnd_rand_int(0,n-1))
+    m_stack = [[_rnd_rand_int(0,n)*2,_rnd_rand_int(0,n)*2]]
+    m_maze  = numpy.zeros((n*2, n*2), dtype=numpy.uint8)
+    for x in range(0,m_maze.shape[0],2):
+        for y in range(0,m_maze.shape[0],2):
+            m_maze[x][y]=2
 
 def _rnd_rand_int(s,e):
-    if (s==e): return s
+    if (s==e): return int(s)
     return int(numpy.random.randint(s,e))
 
-def _setVisited(x,y):
+def _dfs_stack():
+    global m_stack
+    while len(m_stack)>0:
+        v = m_stack.pop(0)
+        _dfs(v[0],v[1],_rnd_rand_int(1,16))
+
+def _dfs(x,y,stack):
+    global m_stack
+    xy = [[[x+1,y],[x+2,y]],[[x-1,y],[x-2,y]],[[x,y+1],[x,y+2]],[[x,y-1],[x,y-2]]]
+    if _setCellValue(x,y,1)==False: return False
+    if stack==0: m_stack.append([x,y])
+    if stack==0: return False
+    for idx in range(len(xy)):
+        if _getCellValue(xy[idx][1][0],xy[idx][1][1])==2:
+            _setCellValue(xy[idx][0][0],xy[idx][0][1],1)
+            _dfs(xy[idx][1][0],xy[idx][1][1],stack-1)
+
+def _save_img(filename):
     global m_maze
-    global m_cell_stack
-    if m_maze[x][y]==0:
-        m_cell_stack.append([x,y])
-        m_maze[x][y]=1
+    m_maze[m_maze==1]=255
+    m_maze[m_maze==2]=128
+    cv2.imwrite(filename, m_maze)
 
 def _getCellValue(x,y):
     global m_maze
-    value = None
     try:
         value = m_maze[x][y]
     except:
         value = None
     return value
 
-def _getUnvisitedNList(x,y):
+def _setCellValue(x,y,v):
     global m_maze
-    global m_cell_stack
-    nb_coord_list_ex = [[x-1,y-1],[x-1,y],[x-1,y+1],[x+1,y-1],[x+1,y+1],[x+1,y],[x,y+1],[x,y-1]]
-    nb_coord_list = [[x-1,y],[x+1,y],[x,y-1],[x,y+1]]
-    list = [_x for _x in nb_coord_list if _getCellValue(_x[0],_x[1])==0]
-    return list
-
-def _processUnvisitedNB(x,y):
-    list = _getUnvisitedNList(x,y)
-    if (len(list)>0):
-        vs = list[_rnd_rand_int(0,len(list)-1)]
-        _setVisited(vs[0],vs[1])
-
-def _processStack():
-    global m_maze
-    global m_cell_stack
-    if len(m_cell_stack)>0:
-        element = m_cell_stack.pop()
-        _processUnvisitedNB(element[0],element[1])
-
-def _process(n):
-    global m_cell_stack
-    if n==0:
-        while(len(m_cell_stack)>0):
-            _processStack()
+    try:
+        m_maze[x][y]=v
+    except:
+        return False
     else:
-        for x in range(n):_processStack()
-        
-def _save_im(filename):
-    global m_maze
-    m_maze[m_maze==1]=255
-    cv2.imwrite(filename, m_maze)
+        return True
 
 if __name__ == "__main__":
-    _init(64,8,128)
-    _process(0)
-    _save_im('out.bmp')
-
+    _init(128,128)
+    _dfs_stack()
+    _save_img('out.bmp')
     
