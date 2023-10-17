@@ -13,6 +13,7 @@ import korad_psu
 import math
 
 m_window  = None
+m_debug   = True
 # Define the layout with responsive elements
 # Single Row Size = 50
 
@@ -27,9 +28,9 @@ m_layout = [
 ]
 
 class korad_gui:
-    def __init__(self,parent):
+    def __init__(self,parent,debug=False):
         self.m_parent             = parent
-        self.m_psu                = korad_psu.korad_psu()
+        self.m_psu                = korad_psu.korad_psu(debug)
         self.m_shall_exit         = False
         self.m_dev_name           = None
         self.m_dev_output_enabled = None
@@ -93,7 +94,7 @@ class korad_gui:
 
 if __name__ == "__main__":
     m_window = sg.Window('KORAD_GUI', m_layout, resizable=True)
-    node = korad_gui(m_window)
+    node = korad_gui(m_window,m_debug)
     while node.isExit()==False:
         node.gui_poll_events()
     m_window.close()
