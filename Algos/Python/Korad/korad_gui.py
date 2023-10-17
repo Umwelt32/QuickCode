@@ -15,6 +15,7 @@ import math
 m_window  = None
 # Define the layout with responsive elements
 # Single Row Size = 50
+
 m_layout = [
     [sg.Text('COM_DEV:',size=(15, 1)),sg.Combo([x[0] for x in korad_ctl._get_serial_list()],size=(15, 1),key='-c_dev-'),sg.Combo(['9600'],size=(10, 1),default_value='9600', key='-c_rate-'),sg.Button('OPEN',size=(10, 1)),sg.Button('CLOSE',size=(10, 1))],
     [sg.Text('KORAD_DEVICE:',size=(15, 1)),sg.Text('<NOT OPENED!>',size=(25, 1), key='-l_dev_name-')],
@@ -64,8 +65,8 @@ class korad_gui:
         self.m_parent['-l_dev_status_led-'].Widget.config(background='green' if self.m_dev_output_enabled else 'red')
         self.m_parent['-l_dev_output-'].update(str(self.m_dev_output_v)+' V ; '+str(self.m_dev_output_a)+' A')
         self.m_parent['-s_dev_vset-'].update(v)
-        self.m_parent['-s_dev_cset-'].update(vc*10)
-        self.m_parent['-s_dev_vsetc-'].update(c)
+        self.m_parent['-s_dev_vsetc-'].update(vc*10)
+        self.m_parent['-s_dev_cset-'].update(c)
         self.m_parent['-s_dev_csetc-'].update(cc*10)
     def gui_poll_events(self):
         event, values = self.m_parent.read()
@@ -84,7 +85,7 @@ class korad_gui:
             self.m_psu.set_voltage_setpoint(v)
         elif event == '-b_dev_cset-':
             a = float(float(values['-s_dev_cset-'])+(float(values['-s_dev_csetc-'])/float(10)))
-            self.m_psu.set_voltage_setpoint(a)
+            self.m_psu.set_current_setpoint(a)
         elif event == 'POLL':
             pass
         node.psu_poll_update()
