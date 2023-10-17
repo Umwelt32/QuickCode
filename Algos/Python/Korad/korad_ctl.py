@@ -39,9 +39,3 @@ def _getPsuCtlNode(port_name,brate=9600):
 def _getLastError():
     global m_last_error
     return str(m_last_error)
-
-if __name__ == "__main__":
-    print(str(_get_serial_list()))
-    port = koradctl.get_port('COM1')
-    psu  = koradctl.PowerSupply(port)
-    print(str(psu.get_identity()))
