@@ -12,15 +12,14 @@ import korad_ctl
 import korad_psu
 import math
 
-m_window  = None
-m_debug   = True
-# Define the layout with responsive elements
-# Single Row Size = 50
+m_window     = None
+m_debug      = True
 
+#layout
 m_layout = [
     [sg.Text('COM_DEV:',size=(15, 1)),sg.Combo([x[0] for x in korad_ctl._get_serial_list()],size=(15, 1),key='-c_dev-'),sg.Combo(['9600'],size=(10, 1),default_value='9600', key='-c_rate-'),sg.Button('OPEN',size=(10, 1)),sg.Button('CLOSE',size=(10, 1))],
     [sg.Text('KORAD_DEVICE:',size=(15, 1)),sg.Text('<NOT OPENED!>',size=(25, 1), key='-l_dev_name-')],
-    [sg.Text('STATUS:', size=(15, 1)),sg.Canvas(size=(25, 25), background_color='red', key='-l_dev_status_led-'),sg.Text('N/A',key='-l_dev_status-',size=(10, 1)),sg.Button('ON',size=(5, 1)),sg.Button('OFF',size=(5, 1))],
+    [sg.Text('STATUS:', size=(15, 1)),sg.Canvas(size=(25, 25), background_color='red', key='-l_dev_status_led-'),sg.Text('N/A',key='-l_dev_status-',size=(10, 1)),sg.Button('ON',size=(10, 1)),sg.Button('OFF',size=(10, 1))],
     [sg.Text('OUTPUT:', size=(15, 1)),sg.Text('N/A',key='-l_dev_output-',size=(30, 1))],
     [sg.Text('VOLTAGE:',size=(15, 1)),sg.Slider(range=(0, 30), orientation='h', size=(15, 15), default_value=12, key='-s_dev_vset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_vsetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_vset-')],
     [sg.Text('CURRENT_MAX:',size=(15, 1)),sg.Slider(range=(0, 10), orientation='h', size=(15, 15), default_value=5, key='-s_dev_cset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_csetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_cset-')],
@@ -89,12 +88,18 @@ class korad_gui:
             self.m_psu.set_current_setpoint(a)
         elif event == 'POLL':
             pass
-        node.psu_poll_update()
+        self.psu_poll_update()
         self.gui_update()
 
-if __name__ == "__main__":
+def _main():
+    global m_window
+    global m_debug
+    global m_layout
     m_window = sg.Window('KORAD_GUI', m_layout, resizable=True)
     node = korad_gui(m_window,m_debug)
     while node.isExit()==False:
         node.gui_poll_events()
     m_window.close()
+
+if __name__ == "__main__":
+    _main()
