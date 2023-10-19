@@ -12,6 +12,8 @@ import korad_ctl
 import korad_psu
 import math
 
+#theme
+sg.theme('DarkGrey5')
 #comm_devs
 m_comm_brates   = ['110', '300', '600', '1200', '2400', '4800', '9600', '14400', '19200', '38400', '57600', '115200', '128000', '256000']
 m_comm_dev_list = [dev[0] for dev in korad_ctl._get_serial_list()]
