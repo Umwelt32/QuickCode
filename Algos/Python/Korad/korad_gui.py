@@ -23,7 +23,7 @@ m_layout = [
     [sg.Text('DEVICE:', size=(15, 1)),sg.Text('<NOT OPENED!>',size=(25, 1), key='-l_dev_name-')],
     [sg.Text('OVP/OCP:',size=(15, 1)),sg.Canvas(size=(25, 25), background_color='red', key='-l_dev_ovp_ocp_status_led-'),sg.Button('OVP',size=(5, 1)),sg.Button('OCP',size=(5, 1)),sg.Button('DISABLE',size=(10, 1))],
     [sg.Text('STATUS:', size=(15, 1)),sg.Canvas(size=(25, 25), background_color='red', key='-l_dev_status_led-'),sg.Text('N/A',key='-l_dev_status-',size=(5, 1)),sg.Button('ON',size=(10, 1)),sg.Button('OFF',size=(10, 1))],
-    [sg.Text('OUTPUT:', size=(15, 1)),sg.Text('N/A',text_color='black',background_color='white',justification='center',key='-l_dev_output-',font=('Helvetica', 25),size=(15, 1))],
+    [sg.Text('OUTPUT:', size=(15, 1)),sg.Text('N/A',text_color='black',background_color='white',justification='center',key='-l_dev_output-',font=('Helvetica', 25),size=(20, 1))],
     [sg.Text('VOLTAGE:',size=(15, 1)),sg.Slider(range=(0, 30), orientation='h', size=(15, 15), default_value=12, key='-s_dev_vset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_vsetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_vset-')],
     [sg.Text('CURRENT_MAX:',size=(15, 1)),sg.Slider(range=(0, 10), orientation='h', size=(15, 15), default_value=5, key='-s_dev_cset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_csetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_cset-')],
     [sg.Text('_' * 70, text_color='black', background_color='white',justification='center',size=(70, 1))],
