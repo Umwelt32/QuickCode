@@ -29,7 +29,7 @@ m_layout = [
     [sg.Text('VOLTAGE:',size=(15, 1)),sg.Slider(range=(0, 30), orientation='h', size=(15, 15), default_value=12, key='-s_dev_vset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_vsetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_vset-')],
     [sg.Text('CURRENT_MAX:',size=(15, 1)),sg.Slider(range=(0, 10), orientation='h', size=(15, 15), default_value=5, key='-s_dev_cset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_csetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_cset-')],
     [sg.Text('_' * 70, text_color='black', background_color='white',justification='center',size=(70, 1))],
-    [sg.Button('EXIT',size=(10, 1)),sg.Button('LOOP',size=(10, 1)),sg.Button('POLL',size=(15, 1))]
+    [sg.Button('EXIT',size=(10, 1)),sg.Button('LOOP',size=(10, 1)),sg.Button('POLL',size=(10, 1))]
 ]
 
 class korad_gui:
@@ -137,4 +137,3 @@ def _main(thread=True,debug=False):
 
 if __name__ == "__main__":
     _main()
-    
