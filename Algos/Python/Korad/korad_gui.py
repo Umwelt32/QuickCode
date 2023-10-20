@@ -10,7 +10,9 @@
 import PySimpleGUI as sg
 import korad_ctl
 import korad_psu
+import threading
 import math
+import time
 
 #theme
 sg.theme('DarkGrey5')
@@ -31,7 +33,7 @@ m_layout = [
 ]
 
 class korad_gui:
-    def __init__(self,parent,debug=False):
+    def __init__(self,parent,use_thread=False,debug=False):
         self.m_parent              = parent
         self.m_psu                 = korad_psu.korad_psu(debug)
         self.m_shall_run           = True
@@ -42,6 +44,9 @@ class korad_gui:
         self.m_dev_setpoint_v      = None
         self.m_dev_setpoint_a      = None
         self.m_dev_ovp_ocp_enabled = None
+        self.m_poll_request        = False
+        self.m_thread  = threading.Thread(target=self.gui_thread) if use_thread else None
+        if self.m_thread: self.m_thread.start()
     def isRunning(self):
         return self.m_shall_run
     def close(self):
@@ -49,9 +54,21 @@ class korad_gui:
     def open(self,dev,br):
         self.m_psu.open(str(dev),int(br))
         if self.m_psu.isOpen():
-            self.psu_poll_update()
+            self.psu_poll_request()
         else:
             sg.popup_error(korad_ctl._getLastError(),title='Error')
+    def gui_thread(self):
+        while self.m_shall_run:
+            time.sleep(1)
+            if self.m_poll_request:
+                self.m_poll_request = False
+                self.psu_poll_update()
+                self.gui_update()
+    def psu_poll_request(self):
+        if self.m_thread:
+            self.m_poll_request = True
+        else:
+            self.psu_poll_update()
     def psu_poll_update(self):
         if self.m_psu and self.m_shall_run:
             self.m_dev_name             = self.m_psu.get_identity()
@@ -63,8 +80,8 @@ class korad_gui:
             self.m_dev_ovp_ocp_enabled  = self.m_psu.get_ovp_ocp_state()
     def gui_update(self):
         if self.m_shall_run:
-            vc,v = math.modf(round(self.m_dev_setpoint_v,1))
-            cc,c = math.modf(round(self.m_dev_setpoint_a,1))
+            vc,v = math.modf(round(self.m_dev_setpoint_v if self.m_dev_setpoint_v else 0,1))
+            cc,c = math.modf(round(self.m_dev_setpoint_a if self.m_dev_setpoint_a else 0,1))
             self.m_parent['-l_dev_name-'].update(str(self.m_dev_name))
             self.m_parent['-l_dev_status-'].update('ON' if self.m_dev_output_enabled else 'OFF')
             self.m_parent['-l_dev_status_led-'].Widget.config(background='green' if self.m_dev_output_enabled else 'red')
@@ -102,13 +119,13 @@ class korad_gui:
                 self.m_psu.set_ocp_state(False)
             elif event == 'POLL':
                 pass
-            self.psu_poll_update()
+            self.psu_poll_request()
             self.gui_update()
 
 def _main(debug=False):
     global m_layout
     window = sg.Window('PSU_GUI', m_layout, resizable=False)
-    node = korad_gui(window,debug)
+    node = korad_gui(window,True,debug)
     while node.isRunning():
         node.gui_poll_events()
     window.close()
