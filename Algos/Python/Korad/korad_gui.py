@@ -29,7 +29,7 @@ m_layout = [
     [sg.Text('VOLTAGE:',size=(15, 1)),sg.Slider(range=(0, 30), orientation='h', size=(15, 15), default_value=12, key='-s_dev_vset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_vsetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_vset-')],
     [sg.Text('CURRENT_MAX:',size=(15, 1)),sg.Slider(range=(0, 10), orientation='h', size=(15, 15), default_value=5, key='-s_dev_cset-'),sg.Slider(range=(0, 9), orientation='h', size=(10, 15), default_value=0, key='-s_dev_csetc-'),sg.Button('SET',size=(10, 1),key='-b_dev_cset-')],
     [sg.Text('_' * 70, text_color='black', background_color='white',justification='center',size=(70, 1))],
-    [sg.Button('EXIT',size=(10, 1)),sg.Button('POLL',size=(15, 1))]
+    [sg.Button('EXIT',size=(10, 1)),sg.Button('POLL',size=(15, 1)),sg.Checkbox('POLL_LOOP', key='-c_dev_poll_loop-')]
 ]
 
 class korad_gui:
@@ -44,6 +44,7 @@ class korad_gui:
         self.m_dev_setpoint_v      = None
         self.m_dev_setpoint_a      = None
         self.m_dev_ovp_ocp_enabled = None
+        self.m_loop_read           = False
         self.m_poll_request        = False
         self.m_psu_thread  = threading.Thread(target=self.psu_thread) if use_thread else None
         if self.m_psu_thread: self.m_psu_thread.start()
@@ -60,7 +61,7 @@ class korad_gui:
     def psu_thread(self):
         while self.m_shall_run:
             time.sleep(1)
-            if self.m_poll_request:
+            if self.m_poll_request or self.m_loop_read:
                 self.m_poll_request = False
                 self.psu_poll_update()
                 self.gui_update()
@@ -118,6 +119,8 @@ class korad_gui:
             elif event == 'DISABLE':
                 self.m_psu.set_ovp_state(False)
                 self.m_psu.set_ocp_state(False)
+            elif event == '-c_dev_poll_loop-':
+                self.m_loop_read = values['-c_dev_poll_loop-']
             elif event == 'POLL':
                 pass
             self.psu_poll_request()
