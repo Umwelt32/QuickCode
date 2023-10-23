@@ -136,4 +136,4 @@ def _main(thread=True,debug=False):
     window.close()
 
 if __name__ == "__main__":
-    _main()
+    _main(True,True)
