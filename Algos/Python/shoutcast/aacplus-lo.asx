@@ -1,0 +1,19 @@
+<ASX VERSION="3.0" BANNERBAR="FIXED">
+	<TITLE>StreamingSoundtracks.com</TITLE>
+	<COPYRIGHT>24seven.FM, LLC</COPYRIGHT>
+	<ABSTRACT>Scores of Music from Movies, Game, TV & Anime w/Chat & Automated Requests</ABSTRACT>
+ <BANNER HREF="http://www.streamingsoundtracks.com/images/logos/logo_sst-194x32a.png">
+	<ABSTRACT>StreamingSoundtracks.com</ABSTRACT>
+	<MOREINFO HREF="http://www.streamingsoundtracks.com" />
+ </BANNER>
+  <ENTRY>
+    <TITLE>SST</TITLE>
+    <REF HREF="icyx://lo5.streamingsoundtracks.com:8000" />
+    <AUTHOR>32k aacPlus</AUTHOR>
+  </ENTRY>
+  <ENTRY>
+    <TITLE>SST</TITLE>
+    <REF HREF="icyx://lo4.streamingsoundtracks.com" />
+    <AUTHOR>32k aacPlus</AUTHOR>
+  </ENTRY>
+</ASX>
