@@ -1,7 +1,7 @@
 ##################################################
 ## Author: https://github.com/Umwelt32/QuickCode
 ## Copyright: 2022
-## Convert KORAD_APP
+## KORAD_APP
 ## References:
 ##############
 ##############
@@ -137,3 +137,4 @@ def _main(thread=True,debug=False):
 
 if __name__ == "__main__":
     _main(True,True)
+    exit(0)

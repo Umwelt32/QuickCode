@@ -1,7 +1,7 @@
 ##################################################
 ## Author: https://github.com/Umwelt32/QuickCode
 ## Copyright: 2022
-## Convert KORAD_APP
+## KORAD_APP
 ## References:
 ##############
 ##############
