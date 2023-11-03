@@ -129,7 +129,7 @@ class korad_gui:
 
 def _main(thread=True,debug=False):
     global m_layout
-    window = sg.Window('PSU_GUI', m_layout, resizable=False)
+    window = sg.Window('PSU_GUI', m_layout, finalize=True,resizable=False)
     node = korad_gui(window,thread,debug)
     while node.isRunning():
         node.poll()
