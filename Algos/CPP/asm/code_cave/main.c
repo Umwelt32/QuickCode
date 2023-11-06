@@ -11,6 +11,7 @@
 #include <commctrl.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <cstdint>
 
 /*https://defuse.ca/online-x86-assembler.htm*/
 
@@ -29,7 +30,7 @@
 #define TS_MEMSET(d,v,l)    {(void)memset(d,v,l);}
 #define TS_SIZE_IN_BYTES(x) (sizeof(x))
 /*--Memory operations--*/
-#define TS_split4B(x) (((x)>>0)&0xFFU),(((x)>>8)&0xFFU),((((x)>>16)&0xFFU)),((((x)>>24)&0xFFU))
+#define TS_split4B(x) ((unsigned char)(((x)>>0)&0xFFU)),((unsigned char)(((x)>>8)&0xFFU)),((unsigned char)(((x)>>16)&0xFFU)),((unsigned char)(((x)>>24)&0xFFU))
 #define TS_OPCODE4B(y,x) (y),TS_split4B(x)
 /*--OP CODES--*/
 #define OP_x86_NOP()     (0x90U)
@@ -87,8 +88,8 @@ static uint8_t codeInject_writeProgramCode(void *dst,void *src,void *old_data,ui
 static uint8_t codeInject_retourFunction(void *_from,void *_to)
 {
     uint8_t result_u8 = E_OK;
-    uint32_t target_u32    = (uint32_t)_to;
-    uint32_t reference_u32 = (uint32_t)_from;
+    uint32_t target_u32    = reinterpret_cast<std::uintptr_t>(_to);
+    uint32_t reference_u32 = reinterpret_cast<std::uintptr_t>(_from);
     /*calculate 32bit jump offset (target-current-jump_op_code_size)*/
     int32_t  jmp_rel       = (target_u32-reference_u32)-5;
     /*build asm block*/
