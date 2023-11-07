@@ -1,3 +1,10 @@
+      /*---------------------------------------------------------*/
+     /* Author: https://github.com/Umwelt32/QuickCode           */
+    /* Copyright: 2022                                         */
+   /* Code incjection                                         */
+  /* References:                                             */
+ /* https://en.wikipedia.org/wiki/Code_cave                 */
+/*---------------------------------------------------------*/
 #include <iostream>
 #include <cstring>
 #include <windows.h>
@@ -10,9 +17,11 @@ bool dll_injector_create_inject(std::string path,std::string dll_path,char *arg=
 
 int main(int argc, char **argv)
 {
-    bool v = dll_injector_create_inject(argv[1],argv[2],nullptr);
+    std::string exe = (argc>1)?argv[1]:"";
+    std::string dll = (argc>2)?argv[2]:"inject.dll";
+    bool v = dll_injector_create_inject(exe,dll,nullptr);
     printf(v?"injected!\n":"error!\n");
-    return 0;
+    return v?0:1;
 }
 
 bool dll_injector_create_inject(std::string path,std::string dll_path,char *arg)
@@ -47,3 +56,4 @@ bool dll_injector_inject(DWORD pid,std::string dll_path)
     CloseHandle(HProc);
     return ((HProc!=0)&&(DllAdr!=0));
 }
+
