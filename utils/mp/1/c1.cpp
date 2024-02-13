@@ -22,6 +22,7 @@ class K2
     public:
         K2(){;}
         K2(const string &s1,const string &s2=""): dane(s1,s2){;}
+        K2(const K2 &k): K2(){*this=k;}
         virtual ~K2(){;}
         K2 &operator=(const K2 &k){this->dane=k.dane;return *this;}
         string &operator[](int idx) {return dane[idx];}
