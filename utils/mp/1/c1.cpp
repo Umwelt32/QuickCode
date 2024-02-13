@@ -23,6 +23,7 @@ class K2
         K2(){;}
         K2(const string &s1,const string &s2=""): dane(s1,s2){;}
         virtual ~K2(){;}
+        K2 &operator=(const K2 &k){this->dane=k.dane;return *this;}
         string &operator[](int idx) {return dane[idx];}
         friend ostream& operator<<(ostream& os, const K2& obj) {os<<obj.dane; return os;}
     private:
