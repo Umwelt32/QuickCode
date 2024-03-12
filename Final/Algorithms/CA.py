@@ -1,4 +1,3 @@
-
 ##################################################
 ## Author: https://github.com/Umwelt32/QuickCode
 ## Copyright: 2023
