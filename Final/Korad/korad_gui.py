@@ -7,7 +7,7 @@
 ##############
 ##################################################
 
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 import korad_ctl
 import korad_psu
 import threading
