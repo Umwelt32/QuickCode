@@ -42,6 +42,10 @@ class serial_gui:
         self.m_console_text        = ''
         self.m_thread  = threading.Thread(target=self._thread_func) if use_thread else None
         if self.m_thread: self.m_thread.start()
+    def shutdown(self):
+        self.m_shall_run = False
+        if self.m_thread: self.m_thread.join()
+        self.m_dev.shutdown()
     def isRunning(self):
         return self.m_shall_run
     def close(self):
@@ -69,7 +73,7 @@ class serial_gui:
         if self.m_shall_run:
             event, values = self.m_parent.read()
             if event == sg.WIN_CLOSED or event == 'EXIT':
-                self.m_shall_run = False
+                self.shutdown()
             elif event == 'OPEN':
                 self.open(values['-c_dev-'],values['-c_rate-'])
             elif event == 'CLOSE':
