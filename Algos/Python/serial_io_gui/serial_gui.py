@@ -1,13 +1,13 @@
 ##################################################
 ## Author: https://github.com/Umwelt32/QuickCode
-## Copyright: 2022
-## KORAD_APP
+## Copyright: 2023
+## SERIALIO_APP
 ## References:
 ##############
 ##############
 ##################################################
 
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 import serial_io
 import threading
 import math
@@ -52,6 +52,7 @@ class serial_gui:
         if e: sg.popup_error(e,title='Error')
     def poll(self):
         self._gui_poll_events()
+        self._gui_update()
     def send(self,data):
         self.m_dev.send(data)
     def _thread_func(self):
@@ -59,7 +60,6 @@ class serial_gui:
             time.sleep(0.5)
             d = self.m_dev.read()
             if d: self.m_console_text=self.m_console_text+str(d)
-            self._gui_update()
     def _gui_update(self):
         if self.m_shall_run:
             self.m_parent['-l_dev_status-'].update('Connected' if self.m_dev.isOpen() else 'Disconnected')
@@ -84,6 +84,7 @@ def _main(thread=True,debug=False):
     window = sg.Window('SERIAL_IO', m_layout, finalize=True,resizable=False)
     node = serial_gui(window,thread,debug)
     while node.isRunning():
+        time.sleep(0.1)
         node.poll()
     window.close()
 
