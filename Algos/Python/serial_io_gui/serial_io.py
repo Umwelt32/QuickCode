@@ -13,6 +13,7 @@ class serial_io:
         self.m_shall_run  = True
         self.m_fifo       = queue.Queue()
         self.m_last_error = None
+        self.m_device_parameters = None
         self.m_rx_thread  = threading.Thread(target=self._rx_thread) if use_thread else None
         if self.m_rx_thread: self.m_rx_thread.start()
     def shutdown(self):
@@ -37,21 +38,30 @@ class serial_io:
                     pass
                 else:
                     if len(byte)>0: self.m_fifo.put(int(byte[0]))
-    def open(self, dev_name,brate=9600,bsize=8,timeout=2,stopbits=serial.STOPBITS_ONE):
+    def open(self, port,baudrate=9600,bytesize=serial.EIGHTBITS,parity=serial.PARITY_NONE,stopbits=serial.STOPBITS_ONE,timeout=2,xonxoff=False):
         try:
             if self.isOpen():self.close()
-            self.m_serial = serial.Serial(port=str(dev_name), baudrate=brate, bytesize=bsize, timeout=timeout, stopbits=serial.STOPBITS_ONE)
+            self.m_device_parameters = {"port": port,"baudrate": baudrate,"bytesize": bytesize,"parity":parity,"stopbits":stopbits,"timeout":timeout,"xonxoff":xonxoff}
+            self.m_serial = serial.Serial(
+                            port=self.m_device_parameters['port'],         baudrate=self.m_device_parameters['baudrate'],
+                            bytesize=self.m_device_parameters['bytesize'], parity=self.m_device_parameters['parity'],
+                            stopbits=self.m_device_parameters['stopbits'], timeout=self.m_device_parameters['timeout'],
+                            xonxoff=self.m_device_parameters['xonxoff'])
         except Exception as e:
             self.m_serial = None
             self._debug_print(str(e),'open')
     def close(self):
         if self.m_serial:
             self.m_serial.close()
-            self.m_fifo   = queue.Queue()
             self.m_serial = None
+            self.m_device_parameters = None
+            self.m_fifo   = queue.Queue()
     def isOpen(self):
         if self.m_serial:
-            return True if self.m_serial.is_open else False
+            try:
+                return True if self.m_serial.is_open else False
+            except:
+                return False
         else:
             return False
     def get_serial_list(self):
