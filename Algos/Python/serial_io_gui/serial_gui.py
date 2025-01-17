@@ -20,7 +20,7 @@ m_comm_brates   = ['110', '300', '600', '1200', '2400', '4800', '9600', '14400',
 m_comm_dev_list = [dev[0] for dev in serial_io._get_serial_list()[0]]
 #layout
 m_tab_config          = [[sg.Combo(m_comm_dev_list,size=(15, 1),default_value='select device',key='-c_dev-'),sg.Combo(m_comm_brates,size=(10, 1),default_value='9600', key='-c_rate-'),sg.Button('OPEN',size=(10, 1)),sg.Button('CLOSE',size=(10, 1))],
-                        [sg.Text('DEVICE_STATUS:',size=(15, 1)),sg.Text('Disconnected',size=(10, 1),key='-l_dev_status-'),sg.Canvas(size=(25, 25), background_color='red', key='-l_dev_status_led-')]]
+                        [sg.Text('DEVICE_STATUS:',size=(15, 1)),sg.Canvas(size=(25, 25), background_color='red', key='-l_dev_status_led-'),sg.Text('Disconnected',size=(10, 1),key='-l_dev_status-')]]
 m_tab_serial_console  = [[sg.Multiline(size=(64, 10),disabled=True,key='-l_dev_output-')],[sg.HorizontalSeparator()],[sg.Input(size=(54, 10),key="-i_dev_input-"),sg.Button('SEND',key='-b_dev_send-',size=(10, 1))]]
 m_tab_options         = [[]]
 # Create the Tab elements
