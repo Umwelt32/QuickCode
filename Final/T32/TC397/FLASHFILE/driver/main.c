@@ -2,6 +2,7 @@
 #include <stdint.h>
 /*--------------------------------------------------------------------------*/
 #define _GCC 1
+#define _LOWFREQ 1
 /*--------------------------------------------------------------------------*/
 #if (_TASKING)
 /*--------------------------------------------------------------------------*/
@@ -33,11 +34,19 @@
 #define U32_REG_READ(addr)      (*((volatile uint32_t*)(addr)))
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
 
-/*To boost up clock use e.g pattern like: 0x53A00000u*/
-#define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
-#define BACON_REG_DL8b_LAST        (0x53A71FF1u)
-#define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
-#define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
+#if (_LOWFREQ)
+    #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
+    #define BACON_REG_DL8b_LAST        (0x53A71FF1u)
+    #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
+    #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
+#else
+    #define BACON_REG_DL8b_NOT_LAST    (0x53A00000u)
+    #define BACON_REG_DL8b_LAST        (0x53A00001u)
+    #define BACON_REG_DL32b_LAST       (0x5FA00001u)
+    #define BACON_REG_DL32b_NOT_LAST   (0x5FA00000u)
+#endif
+
+
 /*--------------------------------------*/
 typedef union
 {
