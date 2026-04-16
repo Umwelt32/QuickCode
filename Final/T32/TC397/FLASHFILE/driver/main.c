@@ -32,13 +32,12 @@
 #define _PUBLIC extern
 #define U32_REG_READ(addr)      (*((volatile uint32_t*)(addr)))
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
-/*#define BACON_REG_CONFIG(bytes) ((0x01 << 0)|(0x00 << 16)|(0x01 << 21)|(0x01 << 22)|(((bytes)-1u) << 23)|(0x05 << 28))*/
-#define BACON_REG_DL8_NOT_LAST     (0x53A71FF0u) //0x53a10000u //0x53A71FF0u
+
+/*To boost up clock use e.g pattern like: 0x53A00000u*/
 #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
 #define BACON_REG_DL8b_LAST        (0x53A71FF1u)
 #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
 #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
-#define BACON_REG_DL8B_LAST        (0x53E71FF1u)
 /*--------------------------------------*/
 typedef union
 {
