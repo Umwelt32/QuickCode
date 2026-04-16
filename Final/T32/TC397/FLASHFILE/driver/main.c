@@ -6,23 +6,23 @@
 /*--------------------------------------------------------------------------*/
 #if (_TASKING)
 /*--------------------------------------------------------------------------*/
-	#define TC_J_A11 __asm("ji a11");
-	#define TC_NOP  __nop();
-	#define TC_STOP __debug();
-	#define TC_SYNC {__asm("dsync");__asm("isync");}
+    #define TC_J_A11 __asm("ji a11");
+    #define TC_NOP  __nop();
+    #define TC_STOP __debug();
+    #define TC_SYNC {__asm("dsync");__asm("isync");}
 /*--------------------------------------------------------------------------*/
 #elif (_GCC)
 /*--------------------------------------------------------------------------*/
-	#define TC_J_A11 {__asm__ volatile ("ji %a11");}
-	#define TC_NOP __asm__ volatile ("nop");
-	#define TC_STOP __asm__ volatile ("debug");
-	#define TC_SYNC {__asm__ volatile ("dsync");__asm__ volatile ("isync");}
+    #define TC_J_A11 {__asm__ volatile ("ji %a11");}
+    #define TC_NOP __asm__ volatile ("nop");
+    #define TC_STOP __asm__ volatile ("debug");
+    #define TC_SYNC {__asm__ volatile ("dsync");__asm__ volatile ("isync");}
 /*--------------------------------------------------------------------------*/
 #else
-	#define TC_J_A11
-	#define TC_NOP
-	#define TC_STOP
-	#define TC_SYNC
+    #define TC_J_A11
+    #define TC_NOP
+    #define TC_STOP
+    #define TC_SYNC
 #endif
 /*--------------------------------------------------------------------------*/
 #define _NULL ((void*)(0))
@@ -338,8 +338,8 @@ int main(void)
     TC_4NOP;
     TC_SYNC;
     TC_4NOP;
-	TC_J_A11;
+    TC_J_A11;
     TC_4NOP;
-	TC_STOP;
+    TC_STOP;
     return 0; // Never reached
 }
