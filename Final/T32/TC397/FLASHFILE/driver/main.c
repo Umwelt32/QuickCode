@@ -33,7 +33,7 @@
 #define _PUBLIC extern
 #define U32_REG_READ(addr)      (*((volatile uint32_t*)(addr)))
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
-#define OP_CODE_DELAY_SYSTICKS (20000)
+#define OP_CODE_DELAY_SYSTICKS (10000)
 
 #if (_LOWFREQ)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
