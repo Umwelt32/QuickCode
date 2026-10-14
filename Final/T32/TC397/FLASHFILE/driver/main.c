@@ -33,14 +33,15 @@
 #define _PUBLIC extern
 #define U32_REG_READ(addr)      (*((volatile uint32_t*)(addr)))
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
-#define OP_CODE_DELAY_SYSTICKS (10000)
 
 #if (_LOWFREQ)
+    #define OP_CODE_DELAY_SYSTICKS     (20000)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
     #define BACON_REG_DL8b_LAST        (0x53A71FF1u)
     #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
     #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
 #else
+    #define OP_CODE_DELAY_SYSTICKS     (10000)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A00000u)
     #define BACON_REG_DL8b_LAST        (0x53A00001u)
     #define BACON_REG_DL32b_LAST       (0x5FA00001u)
@@ -156,6 +157,7 @@ _INLINE void qspi_wren(uint32_t qspi)
     nor_qspi_write_reg_dataentry(qspi,0x06);
     nor_qspi_wait_read_data(qspi,1,_NULL);
     nor_qspi_wait_busy(qspi);
+    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WIP(qspi);
     nor_qspi_sr1v_wait_WEL(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
@@ -178,6 +180,7 @@ _INLINE void nor_spi_transfer_erase_page(uint32_t qspi,uint32_t start_addr,uint3
 
     nor_qspi_wait_read_data(qspi,2,_NULL);
     nor_qspi_wait_busy(qspi);
+    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WIP(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
 }
@@ -234,6 +237,7 @@ _INLINE void nor_spi_transfer_write_page(uint32_t qspi,uint32_t start_addr,uint3
     }
 
     nor_qspi_wait_tx_done(qspi);
+    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WIP(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
 }
