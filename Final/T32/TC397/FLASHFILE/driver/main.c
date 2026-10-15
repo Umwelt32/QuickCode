@@ -35,13 +35,13 @@
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
 
 #if (_LOWFREQ)
-    #define OP_CODE_DELAY_SYSTICKS     (20000)
+    #define OP_CODE_DELAY_SYSTICKS     (1000)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
     #define BACON_REG_DL8b_LAST        (0x53A71FF1u)
     #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
     #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
 #else
-    #define OP_CODE_DELAY_SYSTICKS     (10000)
+    #define OP_CODE_DELAY_SYSTICKS     (0)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A00000u)
     #define BACON_REG_DL8b_LAST        (0x53A00001u)
     #define BACON_REG_DL32b_LAST       (0x5FA00001u)
@@ -106,8 +106,8 @@ _INLINE void nor_qspi_wait_txrx_flag(uint32_t qspi){do {TC_NOP;}  while((U32_REG
 _INLINE void nor_qspi_wait_for_data(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG_READ(qspi+0x40u)&0x00380000u)==0u);} /*rxfifolevel*/
 _INLINE void nor_qspi_wait_tx_done(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG_READ(qspi+0x40u)&0x00070000u)!=0u);} /*txfifolevel*/
 _INLINE void nor_qspi_wait_busy(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG_READ(qspi+0x40u)&0xF0000000u)!=0u);} /*PHASE*/
-_INLINE void nor_qspi_sr1v_wait_WIP(uint32_t qspi) { do{TC_NOP;}while((qspi_read_register(qspi,0x800000)&0x01)!=0); }
-_INLINE void nor_qspi_sr1v_wait_WEL(uint32_t qspi) { do{TC_NOP;}while((qspi_read_register(qspi,0x800000)&0x02)==0); }
+_INLINE void nor_qspi_sr1v_wait_WIP(uint32_t qspi) { do{TC_NOP;}while((qspi_read_register(qspi,0x800000)&0x01)!=0); } /*read chip WIP flag*/
+_INLINE void nor_qspi_sr1v_wait_WEL(uint32_t qspi) { do{TC_NOP;}while((qspi_read_register(qspi,0x800000)&0x02)==0); } /*read chip WEL flag*/
 _INLINE void t32_stm_delay_systicks(uint32_t delay_u32){uint32_t end; if (delay_u32>0){end = (U32_REG_READ(0xF0001010)+delay_u32);do{TC_NOP;}while(end>U32_REG_READ(0xF0001010));}} /*Read STM and wait*/
 
 _INLINE void nor_qspi_wait_read_data(uint32_t qspi,uint8_t level,uint32_t *data)
@@ -117,6 +117,7 @@ _INLINE void nor_qspi_wait_read_data(uint32_t qspi,uint8_t level,uint32_t *data)
     do {TC_NOP;}  while (((U32_REG_READ(qspi+0x40u)>>19)&0x07)<level);
     while(level>0)
     {
+        nor_qspi_wait_for_data(qspi);
         reg=nor_qspi_read_reg_rxexit(qspi);
         if (data!=_NULL){(*data++)=reg;}
         --level;
@@ -128,10 +129,10 @@ _INLINE void qspi_read_id(uint32_t qspi,uint8_t *manufacturer,uint8_t *id)
     uint32_t data;
     nor_qspi_clear_status_rxtx(qspi);
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL32b_LAST);
-    nor_qspi_wait_tx_done(qspi);
     nor_qspi_write_reg_dataentry(qspi,0x9F000000u);
-    nor_qspi_wait_read_data(qspi,1,&data);
+    nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_busy(qspi);
+    nor_qspi_wait_read_data(qspi,1,&data);
     (*id)           = (data>>8);
     (*manufacturer) = (data>>16);
 }
@@ -141,10 +142,11 @@ _INLINE uint8_t qspi_read_register(uint32_t qspi,uint32_t register_u32)
     uint32_t data[2];
     nor_qspi_clear_status_rxtx(qspi);
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL32b_NOT_LAST);
-    nor_qspi_wait_tx_done(qspi);
     nor_qspi_write_reg_dataentry(qspi,((0x65000000u)|(register_u32&0x00FFFFFFu)));
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL32b_LAST);
     nor_qspi_write_reg_dataentry(qspi,0);
+    nor_qspi_wait_tx_done(qspi);
+    nor_qspi_wait_busy(qspi);
     nor_qspi_wait_read_data(qspi,2,&data[0]);
     return ((data[1])&0xFF);
 }
@@ -153,11 +155,10 @@ _INLINE void qspi_wren(uint32_t qspi)
 {
     nor_qspi_clear_status_rxtx(qspi);
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL8b_LAST);
-    nor_qspi_wait_tx_done(qspi);
     nor_qspi_write_reg_dataentry(qspi,0x06);
-    nor_qspi_wait_read_data(qspi,1,_NULL);
+    nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_busy(qspi);
-    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
+    nor_qspi_wait_read_data(qspi,1,_NULL);
     nor_qspi_sr1v_wait_WIP(qspi);
     nor_qspi_sr1v_wait_WEL(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
@@ -180,7 +181,6 @@ _INLINE void nor_spi_transfer_erase_page(uint32_t qspi,uint32_t start_addr,uint3
 
     nor_qspi_wait_read_data(qspi,2,_NULL);
     nor_qspi_wait_busy(qspi);
-    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WIP(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
 }
@@ -201,10 +201,10 @@ _INLINE void nor_spi_transfer_read(uint32_t qspi,uint32_t start_addr,uint32_t le
     uint32_t word;
     nor_qspi_clear_status_rxtx(qspi);
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL32b_NOT_LAST);
-    nor_qspi_wait_tx_done(qspi);
     nor_qspi_write_reg_dataentry(qspi,(0x13000000u)|((start_addr>>8u)&0x00FFFFFFu));
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL8b_NOT_LAST);
     nor_qspi_write_reg_dataentry(qspi,(start_addr&0xFF));
+    nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_read_data(qspi,2,_NULL);
     while (len>0)
     {
@@ -214,6 +214,7 @@ _INLINE void nor_spi_transfer_read(uint32_t qspi,uint32_t start_addr,uint32_t le
         *(data++)=word;
         len--;
     }
+     nor_qspi_wait_busy(qspi);
 }
 
 _INLINE void nor_spi_transfer_write_page(uint32_t qspi,uint32_t start_addr,uint32_t len,uint8_t *data)
@@ -223,10 +224,10 @@ _INLINE void nor_spi_transfer_write_page(uint32_t qspi,uint32_t start_addr,uint3
     nor_qspi_clear_status_rxtx(qspi);
 
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL32b_NOT_LAST);
-    nor_qspi_wait_tx_done(qspi);
     nor_qspi_write_reg_dataentry(qspi,(0x12000000u)|((start_addr>>8u)&0x00FFFFFFu));
     nor_qspi_write_reg_bacon(qspi,BACON_REG_DL8b_NOT_LAST);
     nor_qspi_write_reg_dataentry(qspi,(start_addr&0xFF));
+    nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_read_data(qspi,2,_NULL);
     while (len>0)
     {
@@ -235,11 +236,9 @@ _INLINE void nor_spi_transfer_write_page(uint32_t qspi,uint32_t start_addr,uint3
         nor_qspi_wait_read_data(qspi,1,_NULL);
         len--;
     }
-
     nor_qspi_wait_tx_done(qspi);
-    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
+    nor_qspi_wait_busy(qspi);
     nor_qspi_sr1v_wait_WIP(qspi);
-    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
 }
 
 _INLINE void nor_spi_transfer_write(uint32_t qspi,uint32_t start_addr,uint32_t len,uint8_t *data)
