@@ -108,16 +108,18 @@ _INLINE void nor_qspi_wait_tx_done(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG
 _INLINE void nor_qspi_wait_busy(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG_READ(qspi+0x40u)&0xF0000000u)!=0u);} /*PHASE*/
 _INLINE void nor_qspi_sr1v_wait_WIP(uint32_t qspi) { do{TC_NOP;}while((qspi_read_register(qspi,0x800000)&0x01)!=0); } /*read chip WIP flag*/
 _INLINE void nor_qspi_sr1v_wait_WEL(uint32_t qspi) { do{TC_NOP;}while((qspi_read_register(qspi,0x800000)&0x02)==0); } /*read chip WEL flag*/
+_INLINE void nor_qspi_wait_for_data_level(uint32_t qspi,uint8_t level){do {TC_NOP;}  while (((U32_REG_READ(qspi+0x40u)>>19u)&0x07u)<level);} /*wait until rx fifo fill*/
+
 _INLINE void t32_stm_delay_systicks(uint32_t delay_u32){uint32_t end; if (delay_u32>0){end = (U32_REG_READ(0xF0001010)+delay_u32);do{TC_NOP;}while(end>U32_REG_READ(0xF0001010));}} /*Read STM and wait*/
+
 
 _INLINE void nor_qspi_wait_read_data(uint32_t qspi,uint8_t level,uint32_t *data)
 {
     uint32_t reg;
     nor_qspi_wait_tx_done(qspi);
-    do {TC_NOP;}  while (((U32_REG_READ(qspi+0x40u)>>19)&0x07)<level);
+    nor_qspi_wait_for_data_level(qspi,level);
     while(level>0)
     {
-        nor_qspi_wait_for_data(qspi);
         reg=nor_qspi_read_reg_rxexit(qspi);
         if (data!=_NULL){(*data++)=reg;}
         --level;
@@ -159,7 +161,9 @@ _INLINE void qspi_wren(uint32_t qspi)
     nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_busy(qspi);
     nor_qspi_wait_read_data(qspi,1,_NULL);
+    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WIP(qspi);
+    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WEL(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
 }
@@ -181,6 +185,7 @@ _INLINE void nor_spi_transfer_erase_page(uint32_t qspi,uint32_t start_addr,uint3
 
     nor_qspi_wait_read_data(qspi,2,_NULL);
     nor_qspi_wait_busy(qspi);
+    t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
     nor_qspi_sr1v_wait_WIP(qspi);
     t32_stm_delay_systicks(OP_CODE_DELAY_SYSTICKS);
 }
@@ -252,8 +257,8 @@ _INLINE void nor_spi_transfer_write(uint32_t qspi,uint32_t start_addr,uint32_t l
 
 _INLINE uint8_t qspi_transfer_1byte(uint32_t qspi,uint8_t data)
 {
-    nor_qspi_wait_tx_done(qspi);
     nor_qspi_write_reg_dataentry(qspi,data);
+    nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_for_data(qspi);
     return (uint8_t)nor_qspi_read_reg_rxexit(qspi);
 }
