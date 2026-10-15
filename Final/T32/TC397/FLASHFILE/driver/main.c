@@ -35,7 +35,7 @@
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
 
 #if (_LOWFREQ)
-    #define OP_CODE_DELAY_SYSTICKS     (1000)
+    #define OP_CODE_DELAY_SYSTICKS     (10000)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
     #define BACON_REG_DL8b_LAST        (0x53A71FF1u)
     #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
