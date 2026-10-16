@@ -34,10 +34,10 @@
 #define U32_REG_READ(addr)      (*((volatile uint32_t*)(addr)))
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
 
-#define REG_READ_DELAY_SYSTICKS  (1000)
 #define REG_READ_TIMEOUT_COUNTER (1000)
 
 #if (_LOWFREQ)
+    #define REG_READ_DELAY_SYSTICKS    (2000)
     #define AFTER_ERASE_DELAY          (0xFFFFF)
     #define ERASE_CMD_REPEAT           (2)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
@@ -45,6 +45,7 @@
     #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
     #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
 #else
+    #define REG_READ_DELAY_SYSTICKS    (100)
     #define AFTER_ERASE_DELAY          (0xFFFFF)
     #define ERASE_CMD_REPEAT           (1)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A00000u)
