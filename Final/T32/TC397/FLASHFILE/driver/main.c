@@ -35,6 +35,8 @@
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
 
 #if (_LOWFREQ)
+    #define PROG_TIMEOUT               (0x20)
+    #define ERASE_TIMEOUT              (0xFF)
     #define REG_READ_DELAY_SYSTICKS    (1000)
     #define AFTER_ERASE_DELAY          (0xFFFFF)
     #define ERASE_CMD_REPEAT           (2)
@@ -43,7 +45,9 @@
     #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
     #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
 #else
-    #define REG_READ_DELAY_SYSTICKS    (10)
+    #define PROG_TIMEOUT               (0x08)
+    #define ERASE_TIMEOUT              (0xFF)
+    #define REG_READ_DELAY_SYSTICKS    (100)
     #define AFTER_ERASE_DELAY          (0xFFFFF)
     #define ERASE_CMD_REPEAT           (1)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A00000u)
@@ -200,8 +204,7 @@ _INLINE void qspi_wren(uint32_t qspi)
     nor_qspi_sr1v_wait_WIP(qspi,0);
     nor_qspi_sr1v_wait_WEL(qspi);
 }
-
-
+    
 _INLINE void nor_spi_transfer_erase_page(uint32_t qspi,uint32_t start_addr,uint32_t len)
 {
     uint8_t  opcode = (len > 0x1000u) ? 0xDCu : 0x21u;
@@ -211,7 +214,7 @@ _INLINE void nor_spi_transfer_erase_page(uint32_t qspi,uint32_t start_addr,uint3
         qspi_wren(qspi);
         nor_qspi_write_CMD_4AM(qspi,opcode,start_addr,1);
         t32_stm_delay_systicks(AFTER_ERASE_DELAY);
-        nor_qspi_sr1v_wait4chip(qspi,0,0xFF);
+        nor_qspi_sr1v_wait4chip(qspi,0,ERASE_TIMEOUT);
         ++repeat_u8;
     }while(repeat_u8 < ERASE_CMD_REPEAT);
 }
@@ -256,7 +259,7 @@ _INLINE void nor_spi_transfer_write_page(uint32_t qspi,uint32_t start_addr,uint3
     }
     nor_qspi_wait_tx_done(qspi);
     nor_qspi_wait_busy(qspi);
-    nor_qspi_sr1v_wait4chip(qspi,0,0xFF);
+    nor_qspi_sr1v_wait4chip(qspi,0,PROG_TIMEOUT);
 }
 
 _INLINE void nor_spi_transfer_write(uint32_t qspi,uint32_t start_addr,uint32_t len,uint8_t *data)
