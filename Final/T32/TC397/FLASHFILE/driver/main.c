@@ -36,7 +36,6 @@
 
 #define REG_READ_DELAY_SYSTICKS  (1000)
 #define REG_READ_TIMEOUT_COUNTER (1000)
-#define AFTER_ERASE_DELAY        (0xFFFFF)
 
 #if (_LOWFREQ)
     #define AFTER_ERASE_DELAY          (0xFFFFF)
