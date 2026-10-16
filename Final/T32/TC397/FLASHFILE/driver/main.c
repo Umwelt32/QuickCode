@@ -2,7 +2,7 @@
 #include <stdint.h>
 /*--------------------------------------------------------------------------*/
 #define _GCC 1
-#define _LOWFREQ 1
+#define _LOWFREQ 0
 /*--------------------------------------------------------------------------*/
 #if (_TASKING)
 /*--------------------------------------------------------------------------*/
@@ -45,7 +45,7 @@
     #define BACON_REG_DL32b_LAST       (0x5FA71FF1u)
     #define BACON_REG_DL32b_NOT_LAST   (0x5FA71FF0u)
 #else
-    #define AFTER_ERASE_DELAY          (0xFFFF)
+    #define AFTER_ERASE_DELAY          (0xFFFFF)
     #define ERASE_CMD_REPEAT           (1)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A00000u)
     #define BACON_REG_DL8b_LAST        (0x53A00001u)
