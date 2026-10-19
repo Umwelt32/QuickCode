@@ -35,9 +35,9 @@
 #define U32_REG_WRITE(addr,val) {U32_REG_READ(addr)=(uint32_t)val;}
 
 #if (_LOWFREQ)
-    #define PROG_TIMEOUT               (0x20)
+    #define PROG_TIMEOUT               (0x10)
     #define ERASE_TIMEOUT              (0xFF)
-    #define REG_READ_DELAY_SYSTICKS    (1000)
+    #define REG_READ_DELAY_SYSTICKS    (200)
     #define AFTER_ERASE_DELAY          (0xFFFFF)
     #define ERASE_CMD_REPEAT           (2)
     #define BACON_REG_DL8b_NOT_LAST    (0x53A71FF0u)
@@ -104,7 +104,7 @@ static T32_NOR_operation_block_t m_data_block;
 
 _INLINE uint8_t qspi_read_register(uint32_t qspi,uint32_t register_u32);
 _INLINE void nor_qspi_wait_read_data(uint32_t qspi,uint8_t level,uint32_t *data);
-_INLINE void nor_qspi_wait4register(uint32_t qspi,uint32_t register_u32,uint8_t mask_u8,uint8_t wait4value_u8,uint32_t timeout);
+_INLINE void nor_qspi_wait4_chip_register(uint32_t qspi,uint32_t register_u32,uint8_t mask_u8,uint8_t wait4value_u8,uint32_t timeout);
 
 _INLINE void nor_qspi_write_reg_bacon(uint32_t qspi,uint32_t data) {U32_REG_WRITE(qspi+0x60u,data);/*baconentry*/}
 _INLINE void nor_qspi_write_reg_dataentry(uint32_t qspi,uint32_t data){U32_REG_WRITE(qspi+0x64u,data);/*dataentry*/}
@@ -119,12 +119,12 @@ _INLINE void nor_qspi_wait_tx_done(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG
 _INLINE void nor_qspi_wait_busy(uint32_t qspi) {do {TC_NOP;}  while ((U32_REG_READ(qspi+0x40u)&0xF0000000u)!=0u);} /*PHASE*/
 _INLINE void nor_qspi_wait_for_data_level(uint32_t qspi,uint8_t level){do {TC_NOP;}  while (((U32_REG_READ(qspi+0x40u)>>19u)&0x07u)<level);} /*wait until rx fifo fill*/
 _INLINE void t32_stm_delay_systicks(uint32_t delay_u32){uint32_t end; if (delay_u32>0){end = (U32_REG_READ(0xF0001010)+delay_u32);do{TC_NOP;}while(end>U32_REG_READ(0xF0001010));}} /*Read STM and wait*/
-_INLINE void nor_qspi_sr1v_wait_WEL(uint32_t qspi){nor_qspi_wait4register(qspi,0x800000,0x02,0x02,0x00);} /*read chip WEL flag*/
-_INLINE void nor_qspi_sr1v_wait_WIP(uint32_t qspi,uint32_t timeout){nor_qspi_wait4register(qspi,0x800000,0x01,0x00,timeout);} /*read chip WIP flag*/
-_INLINE void nor_qspi_sr1v_wait_WEL_zero(uint32_t qspi,uint32_t timeout) {nor_qspi_wait4register(qspi,0x800000,0x02,0x00,timeout);} /*read chip WEL flag*/
+_INLINE void nor_qspi_sr1v_wait_WEL(uint32_t qspi){nor_qspi_wait4_chip_register(qspi,0x800000,0x02,0x02,0x00);} /*read chip WEL flag*/
+_INLINE void nor_qspi_sr1v_wait_WIP(uint32_t qspi,uint32_t timeout){nor_qspi_wait4_chip_register(qspi,0x800000,0x01,0x00,timeout);} /*read chip WIP flag*/
+_INLINE void nor_qspi_sr1v_wait_WEL_zero(uint32_t qspi,uint32_t timeout) {nor_qspi_wait4_chip_register(qspi,0x800000,0x02,0x00,timeout);} /*read chip WEL flag*/
 _INLINE void nor_qspi_sr1v_wait4chip(uint32_t qspi,uint32_t timeout1,uint32_t timeout2) {nor_qspi_sr1v_wait_WIP(qspi,timeout1);nor_qspi_sr1v_wait_WEL_zero(qspi,timeout2);} /*read chip WEL/WIP flag*/
 
-_INLINE void nor_qspi_wait4register(uint32_t qspi,uint32_t register_u32,uint8_t mask_u8,uint8_t wait4value_u8,uint32_t timeout)
+_INLINE void nor_qspi_wait4_chip_register(uint32_t qspi,uint32_t register_u32,uint8_t mask_u8,uint8_t wait4value_u8,uint32_t timeout)
 {
     do
     {
