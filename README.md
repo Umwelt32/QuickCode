@@ -10,5 +10,5 @@
 <ul>
 <li>Korad PSU GUI, python script (Algos/Python/Korad)</li>
 <li>Tibia.spr sprite extractor (tibia_spr2bmp.py)</li>
-<li>TC397 FLASHFILE driver implementation + .cmm script (FLASHFILE)</li>
+<li>T32 TC397 FLASHFILE driver implementation + .cmm script (FLASHFILE)</li>
 </ul>
